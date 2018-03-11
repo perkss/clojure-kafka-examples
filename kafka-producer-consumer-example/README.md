@@ -11,6 +11,7 @@ Checkout the project view the start script and follow those commands.
 
 In the project directory run : 
     $ lein uberjar
+
 Then :
     $ java -jar kafka-example-0.1.0-standalone.jar
 
