@@ -10,9 +10,9 @@ Checkout the project view the start script and follow those commands.
 ## Usage
 
 In the project directory run : 
+
     $ lein uberjar
 
-Then :
     $ java -jar kafka-example-0.1.0-standalone.jar
 
 This starts the project and you should see it log out that it has started.
