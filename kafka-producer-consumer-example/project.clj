@@ -1,5 +1,5 @@
 (defproject kafka-example "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
+  :description "Example Kafka Producer and Consumer using Plain Java Interop"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
