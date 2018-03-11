@@ -1,4 +1,5 @@
 (ns kafka-example.core
+  (:require [clojure.tools.logging :as log])
   (:import  (java.util Properties)
             (org.apache.kafka.clients.consumer ConsumerConfig KafkaConsumer)
             (org.apache.kafka.common.serialization StringSerializer StringDeserializer)
@@ -31,7 +32,7 @@ from the provided kafka topic name"
 (defn -main
   [& args]
 
-  (.addShutdownHook (Runtime/getRuntime) (Thread. #(println "Shutting down")))
+  (.addShutdownHook (Runtime/getRuntime) (Thread. #(log/info "Shutting down")))
 
   (def topic "example-topic")
   (def producer-topic "example-produced-topic")
@@ -41,13 +42,13 @@ from the provided kafka topic name"
 
   (def producer (build-producer bootstrap-server))
 
-  (println "Starting the kafka example app. With topic consuming topic" topic
+  (log/info "Starting the kafka example app. With topic consuming topic" topic
            "and sending to topic" producer-topic)
   (while true
 
     (let [records (.poll consumer 100)]
       (doseq [record records]
-        (println "Sending on value" (str "Value: " (.value record)))
+        (log/info "Sending on value" (str "Value: " (.value record)))
         (.send producer (ProducerRecord. producer-topic (str "Value: " (.value record))))))
 
     (.commitAsync consumer)))
