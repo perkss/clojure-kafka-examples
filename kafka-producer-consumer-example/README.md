@@ -1,36 +1,22 @@
 # kafka-example
 
-FIXME: description
+An example showing how to use Kafka producer and consumer using Clojure and the Java API via Java interop. Simple example that consumers from a topic logs the input and then sends on the value to another topic for the user to see. 
 
 ## Installation
 
-Download from http://example.com/FIXME.
+Requires Zookeeper and Kafka to be set up. Check the ports match from the code.
+Checkout the project view the start script and follow those commands.
 
 ## Usage
 
-FIXME: explanation
+In the project directory run : 
+    $ lein uberjar
+Then :
+    $ java -jar kafka-example-0.1.0-standalone.jar
 
-    $ java -jar kafka-example-0.1.0-standalone.jar [args]
+This starts the project and you should see it log out that it has started.
 
-## Options
+## Example
 
-FIXME: listing of options this app accepts.
+Have fun with the example, kept very simple purposely to show the Java interop API of Kafka Clients in Clojure. 
 
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
-
-## License
-
-Copyright © 2018 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
