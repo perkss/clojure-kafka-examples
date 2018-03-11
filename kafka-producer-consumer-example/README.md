@@ -13,7 +13,7 @@ In the project directory run :
 
     $ lein uberjar
 
-    $ java -jar kafka-example-0.1.0-standalone.jar
+    $ java -jar target/uberjar/kafka-example-0.1.0-SNAPSHOT-standalone.jar
 
 This starts the project and you should see it log out that it has started.
 
