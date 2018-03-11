@@ -5,6 +5,29 @@
             (org.apache.kafka.clients.producer KafkaProducer ProducerRecord))
   (:gen-class))
 
+(defn- build-consumer
+  "Create the consumer instance to consume
+from the provided kafka topic name"
+  [consumer-topic bootstrap-server]
+  (let [consumer-props
+        {"bootstrap.servers", bootstrap-server
+         "group.id",          "My-Group"
+         "key.deserializer",  StringDeserializer
+         "value.deserializer", StringDeserializer
+         "auto.offset.reset", "earliest"
+         "enable.auto.commit", "true"}]
+
+    (doto (KafkaConsumer. consumer-props)
+      (.subscribe [consumer-topic]))))
+
+(defn- build-producer
+  "Create the kafka producer to send on messages received"
+  [bootstrap-server]
+  (let [producer-props {"value.serializer" StringSerializer
+                        "key.serializer" StringSerializer
+                        "bootstrap.servers" bootstrap-server}]
+    (KafkaProducer. producer-props)))
+
 (defn -main
   [& args]
 
@@ -14,29 +37,15 @@
   (def producer-topic "example-produced-topic")
   (def bootstrap-server "localhost:9092")
 
-  (def consumer-props
-    {"bootstrap.servers", bootstrap-server
-     "group.id",          "My-Group"
-     "key.deserializer",  StringDeserializer
-     "value.deserializer", StringDeserializer
-     "auto.offset.reset", "earliest"
-     "enable.auto.commit", "true"})
+  (def consumer (build-consumer topic bootstrap-server))
 
-  ;; Create a new kafka consumer with props
-  (def consumer (doto (KafkaConsumer. consumer-props)
-                  (.subscribe [topic])))
+  (def producer (build-producer bootstrap-server))
 
-  (def producer-props {"value.serializer" StringSerializer
-                       "key.serializer" StringSerializer
-                       "bootstrap.servers" bootstrap-server})
-
-  (def producer (KafkaProducer. producer-props))
-
-  (println "Starting my kafka example app. With topic consuming topic" topic
+  (println "Starting the kafka example app. With topic consuming topic" topic
            "and sending to topic" producer-topic)
-   (while true
+  (while true
 
-     (let [records (.poll consumer 10)]
+    (let [records (.poll consumer 100)]
       (doseq [record records]
         (println "Sending on value" (str "Value: " (.value record)))
         (.send producer (ProducerRecord. producer-topic (str "Value: " (.value record))))))
