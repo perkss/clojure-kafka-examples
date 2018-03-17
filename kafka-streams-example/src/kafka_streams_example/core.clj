@@ -25,14 +25,13 @@
   (def builder
     (StreamsBuilder.))
 
-  (def input-topic
-    (into-array String ["plaintext-input"]))
-
+  (def input-topic "plaintext-input")
+  (def output-topic "uppercase")
+ 
   (->
-   (.stream builder "plaintext-input") ;; Create the source node of the stream
+   (.stream builder input-topic) ;; Create the source node of the stream
    (.mapValues (reify ValueMapper (apply [_ v] (clojure.string/upper-case v)))) ;; map the strings to uppercase
-   (.to "uppercase")) ;; Send the repsonse onto an output topic
-
+   (.to output-topic)) ;; Send the repsonse onto an output topic
 
   (def streams
     (KafkaStreams. (.build builder) config))
