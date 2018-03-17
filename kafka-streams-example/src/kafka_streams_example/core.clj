@@ -1,42 +1,43 @@
 (ns kafka-streams-example.core
-  (:import  
-           (org.apache.kafka.streams StreamsConfig KafkaStreams)
-           (org.apache.kafka.common.serialization Serde Serdes Serializer)
-           (org.apache.kafka.streams.kstream KStreamBuilder ValueMapper))
+    (:require [clojure.tools.logging :as log])
+  (:import
+   (org.apache.kafka.streams StreamsConfig KafkaStreams StreamsBuilder)
+   (org.apache.kafka.common.serialization Serde Serdes Serializer)
+   (org.apache.kafka.streams.kstream ValueMapper))
   (:gen-class))
 
 (defn -main
   [& args]
 
-  (.addShutdownHook (Runtime/getRuntime) (Thread. #(println "Shutting down")))
-  
-  (println "Starting kafka stream application")
+  (.addShutdownHook (Runtime/getRuntime) (Thread. #(log/info "Shutting down")))
+
+  (log/info "Starting kafka stream application")
 
   (def properties
-    {StreamsConfig/APPLICATION_ID_CONFIG, "word-count-processing-application"
+    {StreamsConfig/APPLICATION_ID_CONFIG, "uppercase-processing-application"
      StreamsConfig/BOOTSTRAP_SERVERS_CONFIG, "localhost:9092"
      StreamsConfig/KEY_SERDE_CLASS_CONFIG, (.getName (.getClass (Serdes/String)))
      StreamsConfig/VALUE_SERDE_CLASS_CONFIG, (.getName (.getClass (Serdes/String)))})
 
-  ;; Create instance of StreamConfig
   (def config
     (StreamsConfig. properties))
 
   (def builder
-    (KStreamBuilder.))
+    (StreamsBuilder.))
 
   (def input-topic
     (into-array String ["plaintext-input"]))
 
   (->
-   (.stream builder input-topic) ;; Create the source node of the stream
- ;;  (.mapValues (reify ValueMapper (apply [_ v] (str v)) ))
+   (.stream builder "plaintext-input") ;; Create the source node of the stream
    (.mapValues (reify ValueMapper (apply [_ v] (clojure.string/upper-case v)))) ;; map the strings to uppercase
-   (.print))
+   (.to "uppercase")) ;; Send the repsonse onto an output topic
+
 
   (def streams
-    (KafkaStreams. builder config))
-(prn "starting")
- (.start streams)
- (Thread/sleep (* 60000 10))
- (prn "stopping"))
+    (KafkaStreams. (.build builder) config))
+
+  (log/info "starting stream with topology to upper case")
+  (.start streams)
+  (Thread/sleep (* 60000 10))
+  (log/info "stopping"))
