@@ -1,5 +1,5 @@
 (defproject kafka-streams-example "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
+  :description "Kafka Streams Example"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
@@ -12,6 +12,9 @@
                                                     com.sun.jmdk/jmxtools
                                                     com.sun.jmx/jmxri]]]
 
+  :plugins [[lein-environ "1.0.1"]]
   :main ^:skip-aot kafka-streams-example.core
   :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}})
+  :profiles {:uberjar {:aot :all}}
+  :env {:squiggly {:checkers [:eastwood]
+                   :eastwood-exclude-linters [:unlimited-use]}})
