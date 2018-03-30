@@ -8,3 +8,4 @@ Expected to be able to set up Zookeeper and Kafka Broker to run the examples.
 ## Examples
 * Kafka Producer and Consumer in Clojure using Java interop.
 * Kafka Streaming example to upper case of strings.
+* Avro Kafka deserialization and serialization.
