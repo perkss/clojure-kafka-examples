@@ -54,4 +54,3 @@
   (.start streams)
   (Thread/sleep (* 60000 10))
   (log/info "stopping"))
-
