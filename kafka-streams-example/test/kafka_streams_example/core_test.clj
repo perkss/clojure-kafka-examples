@@ -1,9 +1,9 @@
 (ns kafka-streams-example.core-test
   (:require [clojure.test :refer :all]
             [kafka-streams-example.core :as sut])
-  (:import (org.apache.kafka.streams Topology StreamsConfig  TopologyTestDriver)
-           (org.apache.kafka.common.serialization Serde Serdes Serializer)
-           (org.apache.kafka.streams.test ConsumerRecordFactory)))
+  (:import org.apache.kafka.common.serialization.Serdes
+           [org.apache.kafka.streams StreamsConfig TopologyTestDriver]
+           org.apache.kafka.streams.test.ConsumerRecordFactory))
 
 (def properties
   (let [properties (java.util.Properties.)]
