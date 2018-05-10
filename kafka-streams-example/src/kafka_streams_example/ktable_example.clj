@@ -1,37 +1,45 @@
 (ns kafka-streams-example.ktable-example
   (:import (org.apache.kafka.streams StreamsBuilder)
-           (org.apache.kafka.streams.kstream KStream KTable)))
+           (org.apache.kafka.streams.kstream KStream KTable ValueJoiner KGroupedStream
+                                             Reducer)))
+
 
 ;; add threading macro
 (defn ^KStream user-click-stream
-  [input-topic]
-  (let [builder (StreamsBuilder.)
-        click-stream (.stream builder input-topic)]
+  [builder input-topic]
+  (let [click-stream (.stream builder input-topic)]
     click-stream))
 
 (defn ^KTable user-region-table
-  [input-topic]
-  (let [builder (StreamsBuilder.)
-        user-regions-table (.table builder input-topic)]
+  [builder input-topic]
+  (let [user-regions-table (.table builder input-topic)]
     user-regions-table))
 
 ;; where do we build
 (defn clicks-per-region
-  [user-clicks-stream user-regions-table output-topic]
+  [^KStream user-clicks-stream ^KTable user-regions-table output-topic]
   (-> user-clicks-stream
-
+      ;; Joins on the Key which is the name
       (.leftJoin user-regions-table
-                 (fn [clicks region] {:region region :clicks clicks}))
+                 (reify ValueJoiner
+                   (apply [_ left right]
+                     ((fn [clicks region]
+                      ;;  {:region region :clicks clicks}
+                       (str region clicks))
+                      left right))))
+     ;; (.map )
       ;; Check the destructuring here
-      ;; (.reduceByKey (fn [{:keys [region clicks]}] (+  clicks region)))
-      ;; (.to output-topic)
-      ))
+     ;; (.groupByKey)
+      ;;(.reduceByKey (fn [{:keys [region clicks]}] (+ clicks region)))
+      (.to output-topic)))
 
 (defn build-join-topology
   []
-  (let [input-topic-clicks "user-clicks-topic"
+  (let [builder (StreamsBuilder.)
+        input-topic-clicks "user-clicks-topic"
         input-topic-regions "user-regions-topic"
         output-topic "clicks-per-region-topic"
-        user-clicks (user-click-stream input-topic-clicks)
-        user-regions (user-region-table input-topic-regions)]
-    (clicks-per-region user-clicks user-regions output-topic)))
+        user-clicks (user-click-stream builder input-topic-clicks)
+        user-regions (user-region-table builder input-topic-regions)]
+    (clicks-per-region user-clicks user-regions output-topic)
+    builder))

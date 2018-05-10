@@ -7,6 +7,7 @@
                  [org.apache.kafka/kafka-streams "1.1.0"]
                  [org.apache.kafka/kafka-clients "1.1.0"]
                  [org.apache.kafka/kafka-streams-test-utils "1.1.0"]
+                 [org.apache.kafka/kafka-clients "1.1.0" :classifier "test"]
                  [org.clojure/tools.logging "0.4.0"]
                  [org.slf4j/slf4j-log4j12 "1.7.1"]
                  [log4j/log4j "1.2.17" :exclusions [javax.mail/mail
