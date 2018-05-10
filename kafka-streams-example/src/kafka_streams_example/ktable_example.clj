@@ -1,21 +1,15 @@
 (ns kafka-streams-example.ktable-example
   (:import (org.apache.kafka.streams StreamsBuilder)
-           (org.apache.kafka.streams.kstream KStream KTable ValueJoiner KGroupedStream
-                                             Reducer)))
+           (org.apache.kafka.streams.kstream KStream KTable ValueJoiner KGroupedStream)))
 
-
-;; add threading macro
 (defn ^KStream user-click-stream
   [builder input-topic]
-  (let [click-stream (.stream builder input-topic)]
-    click-stream))
+  (.stream builder input-topic))
 
 (defn ^KTable user-region-table
   [builder input-topic]
-  (let [user-regions-table (.table builder input-topic)]
-    user-regions-table))
+  (.table builder input-topic))
 
-;; where do we build
 (defn clicks-per-region
   [^KStream user-clicks-stream ^KTable user-regions-table output-topic]
   (-> user-clicks-stream
@@ -24,15 +18,23 @@
                  (reify ValueJoiner
                    (apply [_ left right]
                      ((fn [clicks region]
-                        (str {:region region :clicks clicks})
-
-                        )
+                        {:region region :clicks clicks})
                       left right))))
-     ;; (.map )
-      ;; Check the destructuring here
-     ;; (.groupByKey)
-      ;;(.reduceByKey (fn [{:keys [region clicks]}] (+ clicks region)))
-      (.to output-topic)))
+      (.map (reify KeyValueMapper
+              (apply [_ k v]
+                ((fn [user clicks-with-regions]
+                   (println (str "clicks-with-regions "  (:region clicks-with-regions)))
+                   (let [value (KeyValue.
+                                (:region clicks-with-regions)
+                                (:clicks clicks-with-regions))]
+                     (println value)
+                     value)) k v))))
+      (.groupByKey)
+      (.reduce (reify Reducer
+                 (apply [_ left right]
+                   ((fn [first-clicks second-clicks]
+                      (println "first clicks" first-clicks "second-clicks" second-clicks)
+                      (+ first-clicks second-clicks)) left right))))))
 
 (defn build-join-topology
   []
@@ -42,5 +44,7 @@
         output-topic "clicks-per-region-topic"
         user-clicks (user-click-stream builder input-topic-clicks)
         user-regions (user-region-table builder input-topic-regions)]
-    (clicks-per-region user-clicks user-regions output-topic)
+    (-> (clicks-per-region user-clicks user-regions output-topic)
+        (.toStream)
+        (.to output-topic))
     builder))

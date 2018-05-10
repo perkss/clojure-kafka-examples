@@ -31,4 +31,6 @@
           input-regions "England"]
       (.pipeInput topology-test-driver (.create factory user-regions-topic "alice" input-regions))
       (.pipeInput topology-test-driver (.create factory user-clicks-topic "alice" input-clicks))
-      (is (= {} (.value (.readOutput topology-test-driver output-topic deserializer deserializer)))))))
+      (let [output (.readOutput topology-test-driver output-topic deserializer deserializer)]
+        (is (= "England" (.key output)))
+        (is (= "2" (.value output)))))))
