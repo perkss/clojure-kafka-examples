@@ -24,8 +24,9 @@
                  (reify ValueJoiner
                    (apply [_ left right]
                      ((fn [clicks region]
-                      ;;  {:region region :clicks clicks}
-                       (str region clicks))
+                        (str {:region region :clicks clicks})
+
+                        )
                       left right))))
      ;; (.map )
       ;; Check the destructuring here
