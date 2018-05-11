@@ -1,6 +1,6 @@
 (ns kafka-streams-example.ktable-example
-  (:import (org.apache.kafka.streams StreamsBuilder)
-           (org.apache.kafka.streams.kstream KStream KTable ValueJoiner KGroupedStream)))
+  (:import (org.apache.kafka.streams StreamsBuilder KeyValue)
+           (org.apache.kafka.streams.kstream KStream KTable ValueJoiner KGroupedStream KeyValueMapper Reducer)))
 
 (defn ^KStream user-click-stream
   [builder input-topic]
@@ -23,17 +23,14 @@
       (.map (reify KeyValueMapper
               (apply [_ k v]
                 ((fn [user clicks-with-regions]
-                   (println (str "clicks-with-regions "  (:region clicks-with-regions)))
                    (let [value (KeyValue.
                                 (:region clicks-with-regions)
                                 (:clicks clicks-with-regions))]
-                     (println value)
                      value)) k v))))
       (.groupByKey)
       (.reduce (reify Reducer
                  (apply [_ left right]
                    ((fn [first-clicks second-clicks]
-                      (println "first clicks" first-clicks "second-clicks" second-clicks)
                       (+ first-clicks second-clicks)) left right))))))
 
 (defn build-join-topology
