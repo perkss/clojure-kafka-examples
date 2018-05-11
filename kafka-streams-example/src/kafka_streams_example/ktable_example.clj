@@ -1,6 +1,6 @@
 (ns kafka-streams-example.ktable-example
   (:import (org.apache.kafka.streams StreamsBuilder KeyValue)
-           (org.apache.kafka.streams.kstream KStream KTable ValueJoiner KGroupedStream KeyValueMapper)))
+           (org.apache.kafka.streams.kstream KStream KTable ValueJoiner KGroupedStream KeyValueMapper Reducer)))
 
 (defn ^KStream user-click-stream
   [builder input-topic]
