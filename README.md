@@ -2,6 +2,8 @@
 
 A selection of examples using Kafka and Kafka Streams with Clojure.
 
+Blog post here: https://perkss.github.io/#/clojure/KafkaClojure#text-body
+
 ## Prerequisites
 Expected to be able to set up Zookeeper and Kafka Broker to run the examples.
 
