@@ -17,6 +17,7 @@
     properties))
 
 
+;; TODO multiple data check the clicks are summing
 (deftest kafka-streams-ktable-example-test
   (testing "Kafka Streams with KTABLE"
     (let [topology (.build (sut/build-join-topology))
@@ -31,6 +32,10 @@
           input-regions "England"]
       (.pipeInput topology-test-driver (.create factory user-regions-topic "alice" input-regions))
       (.pipeInput topology-test-driver (.create factory user-clicks-topic "alice" input-clicks))
-      (let [output (.readOutput topology-test-driver output-topic deserializer deserializer)]
+      (.pipeInput topology-test-driver (.create factory user-clicks-topic "alice" input-clicks))
+      (let [output (.readOutput topology-test-driver output-topic deserializer deserializer)
+            output-2 (.readOutput topology-test-driver output-topic deserializer deserializer)]
         (is (= "England" (.key output)))
-        (is (= "2" (.value output)))))))
+        (is (= "2" (.value output)))
+        (is (= "England" (.key output-2)))
+        (is (= "4" (.value output-2)))))))
