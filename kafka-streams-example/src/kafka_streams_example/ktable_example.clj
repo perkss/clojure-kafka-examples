@@ -31,7 +31,7 @@
       (.reduce (reify Reducer
                  (apply [_ left right]
                    ((fn [first-clicks second-clicks]
-                      (+ first-clicks second-clicks)) left right))))))
+                      (str (+ (Integer. first-clicks) (Integer. second-clicks)))) left right))))))
 
 (defn build-join-topology
   []
