@@ -14,7 +14,8 @@ Expected to be able to set up Zookeeper and Kafka Broker to run the examples.
 * Kafka Streaming join with two Streams (Left Join)
 * Kafka Streaming join with KTABLE.
 * Avro Kafka deserialization and serialization.
+* More examples to come regularly watch this space ...
 
 ## Contributions
 
-* Please get involved and get recognition. If you want to add more examples than I am adding then raise a PR. Or raise issues for ideas on examples that would be good to add. 
+* Please get involved and get recognition. If you want to add more examples then raise a PR. Or raise issues for ideas on examples that would be beneficial.  
