@@ -1,8 +1,8 @@
 (ns kafka-streams-example.core
   (:require [clojure.tools.logging :as log])
   (:import
-   (org.apache.kafka.streams StreamsConfig KafkaStreams StreamsBuilder)
    (org.apache.kafka.common.serialization Serde Serdes Serializer)
+   (org.apache.kafka.streams StreamsConfig KafkaStreams StreamsBuilder)
    (org.apache.kafka.streams.kstream ValueMapper))
   (:gen-class))
 
