@@ -6,16 +6,17 @@
    (org.apache.kafka.streams.kstream ValueMapper))
   (:gen-class))
 
-(defn to-uppercase-topology []
-  (let [builder (StreamsBuilder.)
-        words (.stream builder "plaintext-input")]
-    (.. words
-        (mapValues (reify
-                     ValueMapper
-                     (apply [_ v]
-                       (clojure.string/upper-case v))))
-        (to "uppercase"))
-    builder))
+(defn to-uppercase-topology [input-topic output-topic]
+  (let [builder (StreamsBuilder.)]
+    (->
+     (.stream builder input-topic) ;; Create the source node of the stream
+     (.mapValues (reify
+                   ValueMapper
+                   (apply [_ v]
+                     (clojure.string/upper-case v)))) ;; map the strings to uppercase
+     (.to output-topic))
+    builder) ;; Send the repsonse onto an output topic
+)
 
 (defn -main
   [& args]
@@ -33,22 +34,11 @@
   (def config
     (StreamsConfig. properties))
 
-  (def builder
-    (StreamsBuilder.))
-
   (def input-topic "plaintext-input")
   (def output-topic "uppercase")
 
-  (->
-   (.stream builder input-topic) ;; Create the source node of the stream
-   (.mapValues (reify
-                 ValueMapper
-                 (apply [_ v]
-                   (clojure.string/upper-case v)))) ;; map the strings to uppercase
-   (.to output-topic)) ;; Send the repsonse onto an output topic
-
   (def streams
-    (KafkaStreams. (.build (to-uppercase-topology)) config))
+    (KafkaStreams. (.build (to-uppercase-topology input-topic output-topic)) config))
 
   (log/info "starting stream with topology to upper case")
   (.start streams)

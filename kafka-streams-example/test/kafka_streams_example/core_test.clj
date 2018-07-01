@@ -15,12 +15,14 @@
 
 (deftest kafka-streams-to-uppercase-test
   (testing "Kafka Stream example one to test the uppercase topology"
-    (let [topology (.build (sut/to-uppercase-topology))
+    (let [input-topic "plaintext-input"
+          output-topic "uppercase"
+          topology (.build (sut/to-uppercase-topology input-topic output-topic))
           topology-test-driver (TopologyTestDriver. topology properties)
           serializer  (.serializer (. Serdes String))
           deserializer (.deserializer (. Serdes String))
           factory (ConsumerRecordFactory. serializer serializer)
           input "Hello my first stream testing to uppercase"
           expected "HELLO MY FIRST STREAM TESTING TO UPPERCASE"]
-      (.pipeInput topology-test-driver (.create factory  "plaintext-input" "key" input))
-      (is (= expected (.value (.readOutput topology-test-driver "uppercase"  deserializer deserializer)))))))
+      (.pipeInput topology-test-driver (.create factory input-topic "key" input))
+      (is (= expected (.value (.readOutput topology-test-driver output-topic  deserializer deserializer)))))))
