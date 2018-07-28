@@ -29,6 +29,10 @@ Then with a consumer on the example-prouced-topic it will log out Value: Hello
 
 Docker makes the above very simple. 
 
+    $ docker build -t producer-consumer-example .
+    
+    $ docker run -i -t producer-consumer-example
+
 ## Example
 
 Have fun with the example, kept very simple purposely to show the Java interop API of Kafka Clients in Clojure. 
