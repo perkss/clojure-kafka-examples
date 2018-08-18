@@ -1,12 +1,11 @@
 (ns kafka-example.core
+  (:gen-class)
   (:require [clojure.tools.logging :as log]
             [environ.core :refer [env]])
-  (:import  (java.util Properties)
-            (org.apache.kafka.clients.consumer ConsumerConfig KafkaConsumer)
-            (org.apache.kafka.common.serialization StringSerializer StringDeserializer)
-            (org.apache.kafka.clients.producer KafkaProducer ProducerRecord)
-            (org.apache.kafka.clients.admin AdminClient AdminClientConfig NewTopic))
-  (:gen-class))
+  (:import [org.apache.kafka.clients.admin AdminClient AdminClientConfig NewTopic]
+           org.apache.kafka.clients.consumer.KafkaConsumer
+           [org.apache.kafka.clients.producer KafkaProducer ProducerRecord]
+           [org.apache.kafka.common.serialization StringDeserializer StringSerializer]))
 
 (defn create-topics!
   "Create the topic "
