@@ -14,7 +14,7 @@ Check out the unit tests for each file to see it in action without the need for 
 * Kafka Producer and Consumer in Clojure using Java interop.
 * Kafka Streaming example to upper case of strings.
 * Kafka Streaming testing example.
-* Kafka Streaming join with two Streams (Left Join)
+* Kafka Streaming join with two Streams (Left Join, Inner Join, Outer Join)
 * Kafka Streaming join with KTABLE.
 * Avro Kafka deserialization and serialization.
 * More examples to come regularly watch this space ...
