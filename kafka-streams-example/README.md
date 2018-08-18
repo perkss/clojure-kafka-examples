@@ -1,36 +1,10 @@
 # kafka-streams-example
 
-FIXME: description
+A number of kafka stream examples of joins with streams and streams and also with KTables. Check the tests out. 
 
-## Installation
-
-Download from http://example.com/FIXME.
 
 ## Usage
 
-FIXME: explanation
+Running the tests will give the user ideas of how these joins are working. 
 
-    $ java -jar kafka-streams-example-0.1.0-standalone.jar [args]
-
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
-
-## License
-
-Copyright © 2018 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+    $ java -jar kafka-streams-example-0.1.0-standalone.jar
