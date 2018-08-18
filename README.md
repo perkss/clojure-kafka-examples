@@ -5,7 +5,8 @@ A selection of examples using Kafka and Kafka Streams with Clojure.
 Blog post here: https://perkss.github.io/#/clojure/KafkaClojure#text-body
 
 ## Prerequisites
-Expected to be able to set up Zookeeper and Kafka Broker to run the examples. 
+Expected to be able to set up Zookeeper and Kafka Broker to run the examples. Or use the Confluent platform. 
+The Kafka Stream Examples all have relevant tests rather than running a Jar.
 
 ## Unit Test
 Check out the unit tests for each file to see it in action without the need for running with Zookeeper and Kafka. (Intention to add in Docker file to make it easier)
