@@ -1,10 +1,10 @@
 #!/bin/sh
 echo "Running Kafka Producer Consumer. You must have confluent platform on your
- path installed from: https://docs.confluent.io/current/quickstart/index.html.";
+ path installed from: https://docs.confluent.io/current/quickstart/index.html."
 
 
-export BOOTSTRAP_SERVER=localhost:9092;
-export ZOOKEEPER_HOSTS=localhost:2181;
+export BOOTSTRAP_SERVER=localhost:9092
+export ZOOKEEPER_HOSTS=localhost:2181
 
 #Expects confluent platform to be on the path
 confluent start
