@@ -1,6 +1,10 @@
-(ns kafka-streams-example.kstream-kstream-join-example
+(ns kafka-streams-example.kstream-kstream-inner-join-example
   (:import (org.apache.kafka.streams StreamsBuilder)
            (org.apache.kafka.streams.kstream KStream ValueJoiner JoinWindows)))
+
+
+;; The click and impressions example topology where user clicks are joined to
+;; impressions with a inner join.
 
 (defn ^KStream build-stream
   [^StreamsBuilder builder input-topic]
@@ -9,7 +13,7 @@
 (defn impressions-clicks-topology
   [^KStream impressions ^KStream clicks]
   (-> impressions
-      (.leftJoin clicks
+      (.join clicks
                   (reify ValueJoiner
                     (apply [_ left right]
                       ((fn [impression-value click-value]

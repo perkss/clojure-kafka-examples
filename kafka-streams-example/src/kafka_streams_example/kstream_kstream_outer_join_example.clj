@@ -1,4 +1,4 @@
-(ns kafka-streams-example.kstream-kstream-join-example
+(ns kafka-streams-example.kstream-kstream-outer-join-example
   (:import (org.apache.kafka.streams StreamsBuilder)
            (org.apache.kafka.streams.kstream KStream ValueJoiner JoinWindows)))
 
@@ -9,7 +9,7 @@
 (defn impressions-clicks-topology
   [^KStream impressions ^KStream clicks]
   (-> impressions
-      (.leftJoin clicks
+      (.outerJoin clicks
                   (reify ValueJoiner
                     (apply [_ left right]
                       ((fn [impression-value click-value]
