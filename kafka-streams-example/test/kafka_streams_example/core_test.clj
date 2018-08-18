@@ -3,7 +3,7 @@
             [kafka-streams-example.core :as sut])
   (:import org.apache.kafka.common.serialization.Serdes
            [org.apache.kafka.streams StreamsConfig TopologyTestDriver]
-           org.apache.kafka.streams.test ConsumerRecordFactory OutputVerifier))
+           org.apache.kafka.streams.test.ConsumerRecordFactory))
 
 (def properties
   (let [properties (java.util.Properties.)]
