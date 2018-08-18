@@ -27,9 +27,9 @@
 
   (def properties
     {StreamsConfig/APPLICATION_ID_CONFIG, "uppercase-processing-application"
-     StreamsConfig/BOOTSTRAP_SERVERS_CONFIG, "localhost:9092"
-     StreamsConfig/KEY_SERDE_CLASS_CONFIG, (.getName (.getClass (Serdes/String)))
-     StreamsConfig/VALUE_SERDE_CLASS_CONFIG, (.getName (.getClass (Serdes/String)))})
+     StreamsConfig/BOOTSTRAP_SERVERS_CONFIG, "broker:9092"
+     StreamsConfig/DEFAULT_KEY_SERDE_CLASS_CONFIG, (.getName (.getClass (Serdes/String)))
+     StreamsConfig/DEFAULT_VALUE_SERDE_CLASS_CONFIG, (.getName (.getClass (Serdes/String)))})
 
   (def config
     (StreamsConfig. properties))

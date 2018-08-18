@@ -3,14 +3,14 @@
             [kafka-streams-example.core :as sut])
   (:import org.apache.kafka.common.serialization.Serdes
            [org.apache.kafka.streams StreamsConfig TopologyTestDriver]
-           org.apache.kafka.streams.test.ConsumerRecordFactory))
+           org.apache.kafka.streams.test ConsumerRecordFactory OutputVerifier))
 
 (def properties
   (let [properties (java.util.Properties.)]
     (.put properties StreamsConfig/APPLICATION_ID_CONFIG "uppercase-processing-application")
     (.put properties StreamsConfig/BOOTSTRAP_SERVERS_CONFIG "dummy:9092")
-    (.put properties StreamsConfig/KEY_SERDE_CLASS_CONFIG (.getName (.getClass (Serdes/String))))
-    (.put properties StreamsConfig/VALUE_SERDE_CLASS_CONFIG (.getName (.getClass (Serdes/String))))
+    (.put properties StreamsConfig/DEFAULT_KEY_SERDE_CLASS_CONFIG (.getName (.getClass (Serdes/String))))
+    (.put properties StreamsConfig/DEFAULT_VALUE_SERDE_CLASS_CONFIG (.getName (.getClass (Serdes/String))))
     properties))
 
 (deftest kafka-streams-to-uppercase-test
