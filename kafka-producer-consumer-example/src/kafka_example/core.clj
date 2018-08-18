@@ -1,10 +1,19 @@
 (ns kafka-example.core
-  (:require [clojure.tools.logging :as log])
+  (:require [clojure.tools.logging :as log]
+            [environ.core :refer [env]])
   (:import  (java.util Properties)
             (org.apache.kafka.clients.consumer ConsumerConfig KafkaConsumer)
             (org.apache.kafka.common.serialization StringSerializer StringDeserializer)
-            (org.apache.kafka.clients.producer KafkaProducer ProducerRecord))
+            (org.apache.kafka.clients.producer KafkaProducer ProducerRecord)
+            (org.apache.kafka.clients.admin AdminClient AdminClientConfig NewTopic))
   (:gen-class))
+
+(defn create-topics!
+  "Create the topic "
+  [bootstrap-server topics]
+  (let [config {AdminClientConfig/BOOTSTRAP_SERVERS_CONFIG bootstrap-server}
+        adminClient (AdminClient/create config)]
+    (.createTopics adminClient topics)))
 
 (defn- build-consumer
   "Create the consumer instance to consume
@@ -34,16 +43,22 @@ from the provided kafka topic name"
 
   (.addShutdownHook (Runtime/getRuntime) (Thread. #(log/info "Shutting down")))
 
-  (def topic "example-topic")
+  (def consumer-topic "example-consumer-topic")
   (def producer-topic "example-produced-topic")
-  (def bootstrap-server "localhost:9092")
+  (def bootstrap-server (env :bootstrap-server "localhost:9092"))
+  (def zookeeper-hosts (env :zookeeper-hosts "localhost:2181"))
 
-  (def consumer (build-consumer topic bootstrap-server))
+  ;; Create the example topics
+  (log/infof "Creating the topics %s" [producer-topic consumer-topic])
+  (create-topics! bootstrap-server [(NewTopic. producer-topic 1 1)
+                                    (NewTopic. consumer-topic 1 1)])
+
+  (def consumer (build-consumer consumer-topic bootstrap-server))
 
   (def producer (build-producer bootstrap-server))
 
-  (log/info "Starting the kafka example app. With topic consuming topic" topic
-           "and sending to topic" producer-topic)
+  (log/infof "Starting the kafka example app. With topic consuming topic %s and producing to %s"
+           consumer-topic producer-topic)
   (while true
 
     (let [records (.poll consumer 100)]
