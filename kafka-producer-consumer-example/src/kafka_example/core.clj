@@ -10,10 +10,11 @@
 
 (defn create-topics!
   "Create the topic "
-  [bootstrap-server topics]
+  [bootstrap-server topics partitions replication]
   (let [config {AdminClientConfig/BOOTSTRAP_SERVERS_CONFIG bootstrap-server}
-        adminClient (AdminClient/create config)]
-    (.createTopics adminClient topics)))
+        adminClient (AdminClient/create config)
+        new-topics (map #(NewTopic. % partitions replication) topics)]
+    (.createTopics adminClient new-topics)))
 
 (defn- build-consumer
   "Create the consumer instance to consume
@@ -50,8 +51,7 @@ from the provided kafka topic name"
 
   ;; Create the example topics
   (log/infof "Creating the topics %s" [producer-topic consumer-topic])
-  (create-topics! bootstrap-server [(NewTopic. producer-topic 1 1)
-                                    (NewTopic. consumer-topic 1 1)])
+  (create-topics! bootstrap-server [producer-topic consumer-topic] 1 1)
 
   (def consumer (build-consumer consumer-topic bootstrap-server))
 
