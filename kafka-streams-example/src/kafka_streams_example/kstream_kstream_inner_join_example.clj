@@ -6,6 +6,7 @@
 ;; The click and impressions example topology where user clicks are joined to
 ;; impressions with a inner join.
 
+
 (defn ^KStream build-stream
   [^StreamsBuilder builder input-topic]
   (.stream builder input-topic))

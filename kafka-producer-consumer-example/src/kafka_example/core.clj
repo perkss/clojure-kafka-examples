@@ -57,7 +57,7 @@ from the provided kafka topic name"
   (def producer (build-producer bootstrap-server))
 
   (log/infof "Starting the kafka example app. With topic consuming topic %s and producing to %s"
-           consumer-topic producer-topic)
+             consumer-topic producer-topic)
   (while true
 
     (let [records (.poll consumer 100)]
