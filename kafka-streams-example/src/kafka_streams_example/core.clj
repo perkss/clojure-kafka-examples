@@ -15,8 +15,7 @@
                    (apply [_ v]
                      (clojure.string/upper-case v)))) ;; map the strings to uppercase
      (.to output-topic))
-    builder) ;; Send the repsonse onto an output topic
-)
+    builder))
 
 (defn -main
   [& args]

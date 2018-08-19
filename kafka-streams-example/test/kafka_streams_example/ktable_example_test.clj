@@ -1,6 +1,6 @@
 (ns kafka-streams-example.ktable-example-test
   (:require [kafka-streams-example.ktable-example :as sut]
-            [clojure.test :refer :all])
+            [clojure.test :refer [deftest testing is]])
   (:import org.apache.kafka.common.serialization.Serdes
            [org.apache.kafka.streams StreamsConfig TopologyTestDriver]
            org.apache.kafka.streams.test.ConsumerRecordFactory

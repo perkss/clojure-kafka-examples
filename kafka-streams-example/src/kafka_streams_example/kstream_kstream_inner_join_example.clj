@@ -14,12 +14,12 @@
   [^KStream impressions ^KStream clicks]
   (-> impressions
       (.join clicks
-                  (reify ValueJoiner
-                    (apply [_ left right]
-                      ((fn [impression-value click-value]
-                         (str impression-value "/" click-value))
-                       left right)))
-                  (. JoinWindows of 5000))))
+             (reify ValueJoiner
+               (apply [_ left right]
+                 ((fn [impression-value click-value]
+                    (str impression-value "/" click-value))
+                  left right)))
+             (. JoinWindows of 5000))))
 
 (defn builder-streaming-join-topology
   []

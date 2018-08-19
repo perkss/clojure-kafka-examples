@@ -1,6 +1,6 @@
 (ns kafka-streams-example.kstream-kstream-outer-join-example-test
   (:require [kafka-streams-example.kstream-kstream-outer-join-example :as sut]
-            [clojure.test :refer :all])
+            [clojure.test :refer [deftest is testing]])
   (:import org.apache.kafka.common.serialization.Serdes
            [org.apache.kafka.streams StreamsConfig TopologyTestDriver]
            org.apache.kafka.streams.test.ConsumerRecordFactory
@@ -55,7 +55,6 @@
         deserializer (.deserializer (. Serdes String))
         factory (ConsumerRecordFactory. serializer serializer)
         ad-impressions-topic "adImpressions"
-        ad-clicks-topic "adClicks"
         output-topic "output-topic"]
     (.pipeInput topology-test-driver (.create factory ad-impressions-topic "newspaper-advertisement" "football-advert"))
 
@@ -72,7 +71,6 @@
         serializer  (.serializer (. Serdes String))
         deserializer (.deserializer (. Serdes String))
         factory (ConsumerRecordFactory. serializer serializer)
-        ad-impressions-topic "adImpressions"
         ad-clicks-topic "adClicks"
         output-topic "output-topic"]
     (.pipeInput topology-test-driver (.create factory ad-clicks-topic "newspaper-advertisement" "1"))
