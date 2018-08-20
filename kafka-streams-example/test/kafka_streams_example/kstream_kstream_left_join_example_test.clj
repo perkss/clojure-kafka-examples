@@ -44,7 +44,6 @@
       (is (= "football-advert/1" (.value output))))
     (.close topology-test-driver)))
 
-
 (deftest kafka-streams-example-streaming-left-join-only-left-side-present-test
   (testing "Joining two KafkaStreams with a joining window with input from the left side
            as it is a left join that single data will flow through so will just be shown")

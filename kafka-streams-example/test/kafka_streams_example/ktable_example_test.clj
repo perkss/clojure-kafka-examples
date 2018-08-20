@@ -18,6 +18,8 @@
 
 
 ;; TODO multiple data check the clicks are summing
+
+
 (deftest kafka-streams-ktable-example-test
   (testing "Kafka Streams with KTABLE"
     (let [topology (.build (sut/build-join-topology))

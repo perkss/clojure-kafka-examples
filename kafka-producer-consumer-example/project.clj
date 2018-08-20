@@ -15,4 +15,5 @@
                                                     com.sun.jmx/jmxri]]]
   :main ^:skip-aot kafka-example.core
   :target-path "target/%s"
+  :plugins [[lein-cljfmt "0.6.0"]]
   :profiles {:uberjar {:aot :all}})

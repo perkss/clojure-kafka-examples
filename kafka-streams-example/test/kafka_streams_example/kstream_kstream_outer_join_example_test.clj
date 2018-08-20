@@ -36,6 +36,8 @@
 
 
     ;; Will release first input immediately as outer join
+
+
     (let [output (.readOutput topology-test-driver output-topic deserializer deserializer)]
       (is (= "newspaper-advertisement" (.key output)))
       (is (= "/1" (.value output))))
@@ -44,7 +46,6 @@
       (is (= "newspaper-advertisement" (.key output)))
       (is (= "football-advert/1" (.value output))))
     (.close topology-test-driver)))
-
 
 (deftest kafka-streams-example-streaming-outer-join-only-left-side-present-test
   (testing "Joining two KafkaStreams with a joining window with input from the left side

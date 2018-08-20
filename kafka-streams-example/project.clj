@@ -15,9 +15,7 @@
                                                     com.sun.jmdk/jmxtools
                                                     com.sun.jmx/jmxri]]]
 
-  :plugins [[lein-environ "1.0.1"]]
+  :plugins [[lein-cljfmt "0.6.0"]]
   :main ^:skip-aot kafka-streams-example.core
   :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}}
-  :env {:squiggly {:checkers [:eastwood]
-                   :eastwood-exclude-linters [:unlimited-use]}})
+  :profiles {:uberjar {:aot :all}})
