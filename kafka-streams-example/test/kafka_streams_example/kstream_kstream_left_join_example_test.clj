@@ -1,5 +1,5 @@
-(ns kafka-streams-example.kstream-kstream-join-example-test
-  (:require [kafka-streams-example.kstream-kstream-join-example :as sut]
+(ns kafka-streams-example.kstream-kstream-left-join-example-test
+  (:require [kafka-streams-example.kstream-kstream-left-join-example :as sut]
             [clojure.test :refer [deftest testing is]])
   (:import org.apache.kafka.common.serialization.Serdes
            [org.apache.kafka.streams StreamsConfig TopologyTestDriver]
@@ -29,9 +29,16 @@
         ad-impressions-topic "adImpressions"
         ad-clicks-topic "adClicks"
         output-topic "output-topic"]
-    (.pipeInput topology-test-driver (.create factory ad-clicks-topic "newspaper-advertisement" "1"))
+
     (.pipeInput topology-test-driver (.create factory ad-impressions-topic "newspaper-advertisement" "football-advert"))
 
+    ;; Outputs the record first as it received left side first
+    (let [output (.readOutput topology-test-driver output-topic deserializer deserializer)]
+      (is (= "newspaper-advertisement" (.key output)))
+      (is (= "football-advert/" (.value output))))
+
+    ;; send the right side and it then joins
+    (.pipeInput topology-test-driver (.create factory ad-clicks-topic "newspaper-advertisement" "1"))
     (let [output (.readOutput topology-test-driver output-topic deserializer deserializer)]
       (is (= "newspaper-advertisement" (.key output)))
       (is (= "football-advert/1" (.value output))))
