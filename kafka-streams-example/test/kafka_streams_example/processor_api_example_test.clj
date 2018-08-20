@@ -27,10 +27,27 @@
           factory (ConsumerRecordFactory. serializer serializer)
           input-topic "source-topic"
           output-topic "sink-topic"]
-      (.pipeInput topology-test-driver (.create factory input-topic "word-entry" "stuart"))
+
+      (.pipeInput topology-test-driver (.create factory input-topic "word-entry" "perkss blog rocks clojure rocks kafka rocks"))
 
       (let [output (.readOutput topology-test-driver output-topic deserializer deserializer)]
-        (is (= "stuart" (.key  output)))
+        (is (= "blog" (.key output)))
         (is (= "1" (.value output))))
+
+      (let [output (.readOutput topology-test-driver output-topic deserializer deserializer)]
+        (is (= "clojure" (.key output)))
+        (is (= "1" (.value output))))
+
+      (let [output (.readOutput topology-test-driver output-topic deserializer deserializer)]
+        (is (= "kafka" (.key output)))
+        (is (= "1" (.value output))))
+
+      (let [output (.readOutput topology-test-driver output-topic deserializer deserializer)]
+        (is (= "perkss" (.key output)))
+        (is (= "1" (.value output))))
+
+      (let [output (.readOutput topology-test-driver output-topic deserializer deserializer)]
+        (is (= "rocks" (.key output)))
+        (is (= "3" (.value output))))
 
       (.close topology-test-driver))))

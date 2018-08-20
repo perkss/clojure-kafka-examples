@@ -2,11 +2,13 @@
   (:require [clojure.string :as str]
             [clojure.tools.logging :as log])
   (:import (org.apache.kafka.streams.processor Processor ProcessorContext
-                                               ProcessorSupplier StateStoreSupplier)
+                                               ProcessorSupplier StateStoreSupplier
+                                               PunctuationType Punctuator)
            (org.apache.kafka.streams Topology)
            org.apache.kafka.common.serialization.Serdes
            (org.apache.kafka.streams.state Stores)))
-;; inspired by https://docs.confluent.io/current/streams/developer-guide/processor-api.html
+
+;; inspired by https://kafka.apache.org/11/documentation/streams/developer-guide/processor-api.html
 
 (defn add-word-count
   [word kvstore]
@@ -19,41 +21,49 @@
       (do
         (log/infof "Entering a updated value for word %s with old value %s" word old-value)
         ;; TODO fix horrible casting here
-        (.put @kvstore word (str (inc (int old-value))))))))
+        (.put @kvstore word (str (inc (Integer. old-value))))))))
+
+(defn punctuator-forward-message
+  [timestamp kvstore context]
+  (reify
+    Punctuator
+    (punctuate [_ timestamp]
+      (let [iter (iterator-seq (.all @kvstore))]
+        (log/infof "Iter %s" (pr-str iter))
+        (dorun (map #(.forward @context (.key %) (str (.value %))) iter))
+        (.commit @context)))))
 
 (defn word-processor
-  "Note the first argument is this so is ignored"
+  "The first argument to reify method if this. Impleemt the Processor Java API"
   [store-name]
   (let [store (atom {})
-        context (atom nil)]
+        context (atom nil)
+        timestamp 10]
     (reify
       Processor
       (close [_])
       (init [this processor-context]
         (reset! context processor-context)
-        (reset! store (.getStateStore @context store-name)) ;; does this assign the actual state store?
-        )
+        (reset! store (.getStateStore @context store-name)) ;; Assign the state store to the atom
+
+        (.schedule @context
+                   timestamp
+                   PunctuationType/STREAM_TIME
+                   (punctuator-forward-message timestamp store context)))
       (process [_ key line]
         (log/infof "Process has been called with %s %s" key line)
         (let [words
-              (-> line
+              (-> (str line)
                   (str/lower-case)
                   (str/split #" "))]
+
           (log/infof "Words is: %s" words)
-          #_(map #(add-word-count % store) words)
-          (add-word-count (first words) store)
+          ;; Update the word count in the state store
+          (dorun (map #(add-word-count % store) words))
 
-          (log/infof "Current word value for %s word is :%s" (first words) (.get @store (first words)))
-          ;; change so each word is forwarded each time - these map functions are not working
-          (map (fn [word]
-                 (log/info "Fowarding on")
-                 (let [word-count (.get @store word)]
-                   (.forward context word (str word-count))))
-               words)
-
-          ;; lets forward the first word
-          (.forward @context (first words) (.get @store (first words))))
-        ))))
+          (log/infof "Current word value for %s word is :%s"
+                     (first words)
+                     (.get @store (first words))))))))
 
 (defn word-processor-supplier
   [store-name]
@@ -75,7 +85,7 @@
         (.addProcessor "Process"
                        (word-processor-supplier store-name)
                        (into-array String ["Source"]))
-        ;; state store missing is this actually used? As the let has it?
+        ;; Remove the add state store and you will see my contribution to Kafka:
+        ;; https://issues.apache.org/jira/browse/KAFKA-6659
         (.addStateStore store (into-array String ["Process"]))
-        (.addSink "Sink" "sink-topic" (into-array String ["Process"]))
-        )))
+        (.addSink "Sink" "sink-topic" (into-array String ["Process"])))))
