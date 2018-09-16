@@ -21,9 +21,9 @@
                  (.add (Schema$Field. "repayment_amount" (Schema/create (Schema$Type/INT)) "id field" 0))
                  (.add (Schema$Field. "transaction_amount" (Schema/create (Schema$Type/INT)) "id field" 0))
                  (.add (Schema$Field. "account" (Schema/create (Schema$Type/INT)) "id field" 0)))]
-    (doto (Schema/createRecord "TransactionRecord"
-                               "The transaction schema record"
-                               "org.apache.avro.file"
+    (doto (Schema/createRecord "RepaymentProcessedRecord"
+                               "The repayment processed schema record"
+                               "kafka.streams.example"
                                false
                                fields))))
 

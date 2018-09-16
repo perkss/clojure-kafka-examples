@@ -30,7 +30,7 @@
                  (.add (Schema$Field. "amount" (Schema/create (Schema$Type/INT)) "id field" 0)))]
     (doto (Schema/createRecord "TransactionRecord"
                                "The transaction schema record"
-                               "org.apache.avro.file"
+                               "kafka.streams.example"
                                false
                                fields))))
 
@@ -40,9 +40,9 @@
                  (.add (Schema$Field. "id" (Schema/create (Schema$Type/STRING)) "id field" ""))
                  (.add (Schema$Field. "amount" (Schema/create (Schema$Type/INT)) "id field" 0))
                  (.add (Schema$Field. "account" (Schema/create (Schema$Type/INT)) "id field" 0)))]
-    (doto (Schema/createRecord "TransactionRecord"
-                               "The transaction schema record"
-                               "org.apache.avro.file"
+    (doto (Schema/createRecord "RepaymentRecord"
+                               "The repayment schema record"
+                               "kafka.streams.example"
                                false
                                fields))))
 
