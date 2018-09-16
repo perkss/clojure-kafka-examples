@@ -8,6 +8,7 @@
                  [org.apache.kafka/kafka-clients "2.0.0"]
                  [org.apache.kafka/kafka-streams-test-utils "2.0.0"]
                  [org.apache.kafka/kafka-clients "1.1.0" :classifier "test"]
+                 [io.confluent/kafka-streams-avro-serde "5.0.0"]
                  [org.clojure/tools.logging "0.4.0"]
                  [org.slf4j/slf4j-log4j12 "1.7.1"]
                  [log4j/log4j "1.2.17" :exclusions [javax.mail/mail
@@ -15,6 +16,7 @@
                                                     com.sun.jmdk/jmxtools
                                                     com.sun.jmx/jmxri]]]
 
+  :repositories [["confluent"  {:url "https://packages.confluent.io/maven/"}]]
   :plugins [[lein-cljfmt "0.6.0"]]
   :main ^:skip-aot kafka-streams-example.core
   :target-path "target/%s"
