@@ -17,7 +17,7 @@
                                                     com.sun.jmx/jmxri]]]
 
   :repositories [["confluent"  {:url "https://packages.confluent.io/maven/"}]]
-  :plugins [[lein-cljfmt "0.6.0"]]
+  :plugins [[lein-cljfmt "0.6.1"]]
   :main ^:skip-aot kafka-streams-example.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

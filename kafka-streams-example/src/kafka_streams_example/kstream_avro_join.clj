@@ -49,12 +49,11 @@
                (apply [_ left right]
                  ((fn [repayment-value transaction-value]
                     (build-repayment-processed-record repayment-value transaction-value (build-repayment-processed-schema)))
-                   left right)))
+                  left right)))
              (. JoinWindows of 5000)
              (. Joined with (. Serdes String)
                 value-serializer
-                value-serializer
-                ))))
+                value-serializer))))
 
 (defn repayment-transaction-topology
   [key-serializer value-serializer]

@@ -76,13 +76,13 @@
           serdes-config {"schema.registry.url" "http://localhost"}
           key-serdes (. Serdes String)
           value-serdes (doto
-                         (GenericAvroSerde. schema-registry)
+                        (GenericAvroSerde. schema-registry)
                          (.configure serdes-config false))
           factory (ConsumerRecordFactory. (.serializer key-serdes)
                                           (.serializer value-serdes))
           topology (.build (sut/repayment-transaction-topology
-                             key-serdes
-                             value-serdes))
+                            key-serdes
+                            value-serdes))
           topology-test-driver (TopologyTestDriver. topology properties)
           repayment-topic "repayment"
           transaction-topic "transaction"

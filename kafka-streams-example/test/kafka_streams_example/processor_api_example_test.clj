@@ -17,7 +17,6 @@
     (.put properties StreamsConfig/STATE_DIR_CONFIG (.getAbsolutePath (TestUtils/tempDirectory)))
     properties))
 
-
 (deftest word-count-test
   (testing "A word count processor API test"
     (let [topology (sut/word-processor-topology)
