@@ -11,7 +11,7 @@
   (.table builder input-topic))
 
 (defn clicks-per-region
-  [^KStream user-clicks-stream ^KTable user-regions-table output-topic]
+  [^KStream user-clicks-stream ^KTable user-regions-table]
   (-> user-clicks-stream
       ;; Joins on the Key which is the name
       (.leftJoin user-regions-table
@@ -22,7 +22,7 @@
                       left right))))
       (.map (reify KeyValueMapper
               (apply [_ k v]
-                ((fn [user clicks-with-regions]
+                ((fn [_ clicks-with-regions]
                    (let [value (KeyValue.
                                 (:region clicks-with-regions)
                                 (:clicks clicks-with-regions))]
@@ -41,7 +41,7 @@
         output-topic "clicks-per-region-topic"
         user-clicks (user-click-stream builder input-topic-clicks)
         user-regions (user-region-table builder input-topic-regions)]
-    (-> (clicks-per-region user-clicks user-regions output-topic)
+    (-> (clicks-per-region user-clicks user-regions)
         (.toStream)
         (.to output-topic))
     builder))
