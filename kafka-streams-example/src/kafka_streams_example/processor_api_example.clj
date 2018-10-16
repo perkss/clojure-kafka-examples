@@ -1,9 +1,8 @@
 (ns kafka-streams-example.processor-api-example
   (:require [clojure.string :as str]
             [clojure.tools.logging :as log])
-  (:import (org.apache.kafka.streams.processor Processor ProcessorContext
-                                               ProcessorSupplier StateStoreSupplier
-                                               PunctuationType Punctuator)
+  (:import (org.apache.kafka.streams.processor Processor
+                                               ProcessorSupplier PunctuationType Punctuator)
            (org.apache.kafka.streams Topology)
            org.apache.kafka.common.serialization.Serdes
            (org.apache.kafka.streams.state Stores)))
@@ -77,9 +76,9 @@
   (let [builder (Topology.)
         store-name "Counts"
         store (Stores/keyValueStoreBuilder
-               (Stores/persistentKeyValueStore store-name)
-               (Serdes/String)
-               (Serdes/String))]
+                (Stores/persistentKeyValueStore store-name)
+                (Serdes/String)
+                (Serdes/String))]
     (-> builder
         (.addSource "Source" (into-array String ["source-topic"]))
         (.addProcessor "Process"

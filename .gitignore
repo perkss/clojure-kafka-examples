@@ -1,6 +1,6 @@
 *~
-pom.xml
-pom.xml.asc
+kafka-streams-example/pom.xml
+kafka-producer-consumer-example/pom.xml
 *.jar
 *.class
 /lib/
@@ -12,3 +12,5 @@ pom.xml.asc
 .lein-plugins/
 .lein-failures
 .nrepl-port
+*.iml
+/.idea
