@@ -18,9 +18,9 @@
   []
   (let [fields (doto (ArrayList.)
                  (.add (Schema$Field. "id" (Schema/create (Schema$Type/STRING)) "id field" ""))
-                 (.add (Schema$Field. "repayment_amount" (Schema/create (Schema$Type/INT)) "id field" 0))
-                 (.add (Schema$Field. "transaction_amount" (Schema/create (Schema$Type/INT)) "id field" 0))
-                 (.add (Schema$Field. "account" (Schema/create (Schema$Type/INT)) "id field" 0)))]
+                 (.add (Schema$Field. "repayment_amount" (Schema/create (Schema$Type/INT)) "repayment amount field" 0))
+                 (.add (Schema$Field. "transaction_amount" (Schema/create (Schema$Type/INT)) "transaction amount field" 0))
+                 (.add (Schema$Field. "account" (Schema/create (Schema$Type/INT)) "account field" 0)))]
     (doto (Schema/createRecord "RepaymentProcessedRecord"
                                "The repayment processed schema record"
                                "kafka.streams.example"
