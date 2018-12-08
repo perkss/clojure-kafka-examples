@@ -30,8 +30,8 @@
           factory (ConsumerRecordFactory. key-serializer value-serializer)
           input-topic "trade-input-topic"
           output-topic "trades-by-trade-id"
-          trade-msg {:id       (str (uuid/v1))
-                     :trade-id (str (uuid/v1))
+          trade-msg {:id       (str (uuid/v4))
+                     :trade-id (str (uuid/v4))
                      :buyer    "perkss"
                      :seller   "stuart"}
           trade-msg-key (:id trade-msg)
