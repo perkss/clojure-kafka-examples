@@ -1,7 +1,7 @@
 version: '3'
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:5.3.0
+    image: confluentinc/cp-zookeeper:latest
     hostname: zookeeper
     container_name: zookeeper
     ports:
@@ -10,7 +10,7 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
   broker:
-    image: confluentinc/cp-enterprise-kafka:5.3.0
+    image: confluentinc/cp-enterprise-kafka:latest
     hostname: broker
     container_name: broker
     depends_on:
