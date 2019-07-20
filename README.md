@@ -1,6 +1,6 @@
 ## About
 
-A selection of examples using Kafka and Kafka Streams with Clojure.
+A selection of examples using Kafka and Kafka Streams with Clojure. I wanted to learn the real Kafka API via Clojure not via a Clojure wrapper so here are examples of using the raw API, which is clean and means you do not need to wait for Clojure wrapper libraries to upgrade Kafka. 
 
 Blog post here: https://perkss.github.io/#/clojure/KafkaClojure#text-body
 
