@@ -52,11 +52,11 @@ Now lets check they have been created by listing them
     
 Now create the consumer to listen to messages you will eventually produce and will be processed by Java.
 
-    $ docker-compose exec kafka-broker  kafka-console-producer --request-required-acks 1 --broker-list localhost:29092 --topic example-topic
+    $ docker-compose exec kafka-broker kafka-console-consumer --bootstrap-server kafka-broker:9092 --topic example-topic
     
 Now create the producer to send messages that will be processed
 
-    $ docker-compose exec kafka-broker kafka-console-consumer --bootstrap-server localhost:29092 --topic example-produced-topic --from-beginning
+    $ docker-compose exec kafka-broker kafka-console-consumer --bootstrap-server localhost:9092 --topic example-produced-topic --from-beginning
     
     
 # Produce messages for the app to consumer
