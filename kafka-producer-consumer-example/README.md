@@ -4,10 +4,10 @@ An example showing how to use Kafka producer and consumer using Clojure and the 
 
 ## Installation
 
-Requires Zookeeper and Kafka to be set up. Check the ports match from the code.
+Requires Zookeeper and Kafka to be set up. Please check the main README to run the bundled `docker-compose` file. Check the ports match from the code.
 Checkout the project view the start script and follow those commands.
 
-You can also just install confluent platform and run the start-example.sh script from the bin directory.
+Alternatively you can also just install confluent platform docker version and start it. Or install Kafka locally and set the location the same as `/usr/local/bin/kafka/bin/` and `/usr/local/zookeeper/bin/` and then run the start.sh script from the bin directory.
 
 ## Usage
 
@@ -27,13 +27,13 @@ With the app running it will log out:
 
 Then with a consumer on the example-produced-topic it will log out Value: Hello
 
-## Running with Docker and Confluent
+## Running with Docker
 
 Docker makes the above very simple.
 
-To start the required Kafka and Zookeeper run this starts a separate docker network with these two exposing them on localhost:
+To start the required Kafka and Zookeeper run the following in the parent directory this starts a separate docker network with these two exposing them on localhost:
     
-    $ docker-compose up -d
+    $ ../docker-compose up -d
     
 To build the example docker image and run it follow:
     
