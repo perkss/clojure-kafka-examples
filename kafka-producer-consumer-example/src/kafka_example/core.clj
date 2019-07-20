@@ -21,7 +21,7 @@ from the provided kafka topic name"
   [consumer-topic bootstrap-server]
   (let [consumer-props
         {"bootstrap.servers", bootstrap-server
-         "group.id",          "My-Group"
+         "group.id",          "example"
          "key.deserializer",  StringDeserializer
          "value.deserializer", StringDeserializer
          "auto.offset.reset", "earliest"
@@ -43,26 +43,25 @@ from the provided kafka topic name"
 
   (.addShutdownHook (Runtime/getRuntime) (Thread. #(log/info "Shutting down")))
 
-  (def consumer-topic "example-consumer-topic")
-  (def producer-topic "example-produced-topic")
-  (def bootstrap-server (env :bootstrap-server "localhost:9092"))
-  (def zookeeper-hosts (env :zookeeper-hosts "localhost:2181"))
+  (let [consumer-topic "example-consumer-topic"
+        producer-topic "example-produced-topic"
+        bootstrap-server (env :bootstrap-server "localhost:9092")
+        zookeeper-hosts (env :zookeeper-hosts "localhost:2181")]
+    ;; Create the example topics
+    (log/infof "Creating the topics %s" [producer-topic consumer-topic])
+    (create-topics! bootstrap-server [producer-topic consumer-topic] 1 1)
 
-  ;; Create the example topics
-  (log/infof "Creating the topics %s" [producer-topic consumer-topic])
-  (create-topics! bootstrap-server [producer-topic consumer-topic] 1 1)
+    (def consumer (build-consumer consumer-topic bootstrap-server))
 
-  (def consumer (build-consumer consumer-topic bootstrap-server))
+    (def producer (build-producer bootstrap-server))
 
-  (def producer (build-producer bootstrap-server))
+    (log/infof "Starting the kafka example app. With topic consuming topic %s and producing to %s"
+               consumer-topic producer-topic)
+    (while true
 
-  (log/infof "Starting the kafka example app. With topic consuming topic %s and producing to %s"
-             consumer-topic producer-topic)
-  (while true
+      (let [records (.poll consumer 100)]
+        (doseq [record records]
+          (log/info "Sending on value" (str "Processed Value: " (.value record)))
+          (.send producer (ProducerRecord. producer-topic (str "Processed Value: " (.value record))))))
 
-    (let [records (.poll consumer 100)]
-      (doseq [record records]
-        (log/info "Sending on value" (str "Value: " (.value record)))
-        (.send producer (ProducerRecord. producer-topic (str "Value: " (.value record))))))
-
-    (.commitAsync consumer)))
+      (.commitAsync consumer))))

@@ -20,6 +20,42 @@ Check out the unit tests for each file to see it in action without the need for 
 * Avro Kafka deserialization and serialization.
 * More examples to come regularly watch this space ...
 
+## Kafka and Zookeeper
+
+We have provided our own docker-compose file that will start Kafka and Zookeeper via localhost, so other containers or local apps can access the broker.
+
+Start this using the command `docker-compose up -d`
+
+```yaml
+version: '3'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:5.3.0
+    hostname: zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+  broker:
+    image: confluentinc/cp-enterprise-kafka:5.3.0
+    hostname: broker
+    container_name: broker
+    depends_on:
+      - zookeeper
+    ports:
+      - "29092:29092"
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+```
+
 ## Contributions
 
 * Please get involved and get recognition. If you want to add more examples then raise a PR. Or raise issues for ideas on examples that would be beneficial.  
