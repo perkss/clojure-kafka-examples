@@ -31,7 +31,7 @@ Then with a consumer on the example-produced-topic it will log out Value: Hello
 
 Docker makes the above very simple.
 
-To start the required Kafka and Zookeeper run:
+To start the required Kafka and Zookeeper run this starts a separate docker network with these two exposing them on localhost:
     
     $ docker-compose up -d
     
@@ -43,14 +43,14 @@ Please note we use localhost in the boostrap server and the zookeeper host so we
 
     $ docker run --network="host" -i -t producer-consumer-example
   
-Then we need to create the required topics not we reference the docker-compose names for kafka-broker and zookeeper. Rather than if running on bare metal the local host.
+Then we need to create the required topics note we reference the docker-compose names for broker and zookeeper. Rather than if running on bare metal the localhost.
 
-    $ docker-compose exec kafka-broker kafka-topics --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic example-topic
-    $ docker-compose exec kafka-broker kafka-topics --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic example-produced-topic
+    $ docker exec broker kafka-topics --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic example-topic
+    $ docker exec broker kafka-topics --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic example-produced-topic
     
 Now lets check they have been created by listing them if running from the docker-compose file location
 
-    $ docker-compose exec kafka-broker kafka-topics --zookeeper zookeeper:2181 --list
+    $ docker exec broker kafka-topics --zookeeper zookeeper:2181 --list
     
 Or pass localhost and from the machine
 
@@ -58,7 +58,7 @@ Or pass localhost and from the machine
     
 Now create the consumer to listen to messages you will eventually produce and will be processed by Java.
 
-    $ docker-compose exec kafka-broker kafka-console-consumer --bootstrap-server kafka-broker:9092 --topic example-produced-topic --from-beginning
+    $ docker exec broker kafka-console-consumer --bootstrap-server broker:9092 --topic example-produced-topic --from-beginning
 
 Or from the local machine instance
 
@@ -66,14 +66,12 @@ Or from the local machine instance
     
 Now create the producer to send messages that will be processed
 
-    $ docker-compose exec broker kafka-console-producer --broker-list zookeeper:9092 --topic example-consumer-topic
+    $ docker exec broker kafka-console-producer --broker-list broker:9092 --topic example-consumer-topic
     
 Or from the local
 
     $ /usr/local/bin/kafka/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic example-consumer-topic
-    
-# Produce messages for the app to consumer
-    
+        
 
 ## Example
 
