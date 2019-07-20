@@ -5,7 +5,7 @@ kafka-producer-consumer-example/pom.xml
 *.class
 /lib/
 /classes/
-/target/
+target
 /checkouts/
 .lein-deps-sum
 .lein-repl-history
