@@ -25,15 +25,42 @@ With the app running it will log out:
 
     INFO  kafka-example.core: Sending on value Value: Hello
 
-Then with a consumer on the example-prouced-topic it will log out Value: Hello
+Then with a consumer on the example-produced-topic it will log out Value: Hello
 
-## Running with Docker
+## Running with Docker and Confluent
 
 Docker makes the above very simple.
 
+To start the required Kafka and Zookeeper run:
+    
+    $ docker-compose up -d
+    
+To build the example docker image and run it follow:
+    
     $ docker build -t producer-consumer-example .
 
     $ docker run -i -t producer-consumer-example
+  
+Then we need to create the required topics not we reference the docker-compose names for kafka-broker and zookeeper. Rather than if running on bare metal the local host.
+
+    $ docker-compose exec kafka-broker kafka-topics --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic example-topic
+    $ docker-compose exec kafka-broker kafka-topics --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic example-produced-topic
+    
+Now lets check they have been created by listing them
+
+    $ docker-compose exec kafka-broker kafka-topics --zookeeper zookeeper:2181 --list
+    
+Now create the consumer to listen to messages you will eventually produce and will be processed by Java.
+
+    $ docker-compose exec kafka-broker  kafka-console-producer --request-required-acks 1 --broker-list localhost:29092 --topic example-topic
+    
+Now create the producer to send messages that will be processed
+
+    $ docker-compose exec kafka-broker kafka-console-consumer --bootstrap-server localhost:29092 --topic example-produced-topic --from-beginning
+    
+    
+# Produce messages for the app to consumer
+    
 
 ## Example
 
