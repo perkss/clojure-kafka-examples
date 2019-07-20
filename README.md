@@ -6,7 +6,7 @@ Blog post here: https://perkss.github.io/#/clojure/KafkaClojure#text-body
 
 ## Prerequisites
 Expected to be able to set up Zookeeper and Kafka Broker to run the examples. Or use the Confluent platform. 
-The Kafka Stream Examples all have relevant tests rather than running a Jar.
+The Kafka Stream Examples all have relevant tests rather than running a Jar. Please check individual module README to check how to run.
 
 ## Unit Test
 Check out the unit tests for each file to see it in action without the need for running with Zookeeper and Kafka. (Intention to add in Docker file to make it easier)
