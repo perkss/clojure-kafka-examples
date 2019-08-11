@@ -66,7 +66,7 @@ Or from the local machine instance
     
 Now create the producer to send messages that will be processed
 
-    $ docker exec broker kafka-console-producer --broker-list broker:9092 --topic example-consumer-topic
+    $ docker exec broker -it kafka-console-producer --broker-list broker:9092 --topic example-consumer-topic
     
 Or from the local
 
