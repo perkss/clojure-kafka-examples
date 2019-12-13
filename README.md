@@ -9,7 +9,7 @@ Expected to be able to set up Zookeeper and Kafka Broker to run the examples. Or
 The Kafka Stream Examples all have relevant tests rather than running a Jar. Please check individual module README to check how to run.
 
 ## Unit Test
-Check out the unit tests for each file to see it in action without the need for running with Zookeeper and Kafka. (Intention to add in Docker file to make it easier)
+Check out the unit tests for each file to see it in action without the need for running with Zookeeper and Kafka.
 
 ## Examples
 * Kafka Producer and Consumer in Clojure using Java interop.
