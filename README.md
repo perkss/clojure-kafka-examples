@@ -18,6 +18,7 @@ Check out the unit tests for each file to see it in action without the need for 
 * Kafka Streaming join with two Streams (Left Join, Inner Join, Outer Join)
 * Kafka Streaming join with KTABLE.
 * Avro Kafka deserialization and serialization.
+* KStreamGroup Aggregate
 * More examples to come regularly watch this space ...
 
 ## Kafka and Zookeeper

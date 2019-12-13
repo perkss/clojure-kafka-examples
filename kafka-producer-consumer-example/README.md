@@ -76,3 +76,10 @@ Or from the local
 ## Example
 
 Have fun with the example, kept very simple purposely to show the Java interop API of Kafka Clients in Clojure.
+
+
+## Security TLS
+
+A great tutorial on TLS and Kafka is available from [Confluent](https://docs.confluent.io/current/security/security_tutorial.html#generating-keys-certs).
+
+
