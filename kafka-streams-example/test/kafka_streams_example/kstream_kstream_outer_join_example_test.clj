@@ -26,6 +26,8 @@
 
 
     ;; Will release first input immediately as outer join
+
+
     (let [output (.readOutput topology-test-driver output-topic deserializer deserializer)]
       (is (= "newspaper-advertisement" (.key output)))
       (is (= "/1" (.value output))))

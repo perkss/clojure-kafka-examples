@@ -34,7 +34,6 @@
       (is (= "t" (.key output)))
       (is (= 3 (.value output))))
 
-
     (.pipeInput topology-test-driver (.create factory input-topic "4" "things"))
 
     ;; Aggregates the count for items beginning with t

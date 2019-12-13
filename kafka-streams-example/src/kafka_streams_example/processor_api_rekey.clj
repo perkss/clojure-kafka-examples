@@ -29,7 +29,6 @@
   (log/infof "Sending on rekey trade Key: %s Message %s" trade-id message)
   (.forward context trade-id message sink))
 
-
 (defn trade-rekey-topology
   "Topology that takes a trade and rekeys it by the provided function"
   [builder]
