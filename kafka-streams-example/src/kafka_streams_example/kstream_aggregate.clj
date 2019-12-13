@@ -27,7 +27,7 @@
         (reify Initializer
           (apply [_] 0))
         (reify Aggregator
-          (apply [_ _ ^String new-value agg-value]
+          (apply [_ _ new-value agg-value]
             (long (+ (.length new-value) agg-value))))
         (Materialized/with (Serdes/String) (Serdes/Long)))
  ))
