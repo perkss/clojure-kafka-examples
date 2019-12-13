@@ -1,4 +1,5 @@
 (ns kafka-streams-example.kstream-aggregate
+  (:require [kafka-streams-example.utils :as kstream-utils])
   (:import [org.apache.kafka.streams.kstream Aggregator Initializer KeyValueMapper KStream Materialized Produced KTable]
            org.apache.kafka.streams.StreamsBuilder
            (org.apache.kafka.common.serialization Serdes)))
@@ -11,11 +12,6 @@
 ;        (aggKey, newValue, aggValue) -> aggValue + newValue, /* adder */
 ;        Materialized.<String, Long, WindowStore<Bytes, byte[]>>as("time-windowed-aggregated-stream-store") /* state store name */
 ;        .withValueSerde(Serdes.Long())); /* serde for aggregate value */
-
-(defn ^KStream build-stream
-  [^StreamsBuilder builder ^String input-topic]
-  (.stream builder input-topic))
-
 (defn ^KTable impressions-clicks-topology
   [^KStream input]
   (-> input
@@ -36,7 +32,7 @@
   (let [builder (StreamsBuilder.)
         input-topic "input-topic"
         output-topic "output-topic"
-        input (build-stream builder input-topic)]
+        input (kstream-utils/build-stream builder input-topic)]
 
     (-> (impressions-clicks-topology input)
         (.toStream)

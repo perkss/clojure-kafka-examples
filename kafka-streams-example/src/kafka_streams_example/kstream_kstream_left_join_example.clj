@@ -1,18 +1,8 @@
 (ns kafka-streams-example.kstream-kstream-left-join-example
   (:require [clojure.tools.logging :as log])
-  (:import [org.apache.kafka.streams.kstream JoinWindows KStream ValueJoiner ForeachAction]
+  (:require [kafka-streams-example.utils :as kstream-utils])
+  (:import [org.apache.kafka.streams.kstream JoinWindows KStream ValueJoiner]
            org.apache.kafka.streams.StreamsBuilder))
-
-(defn peek-stream
-  [stream]
-  (.peek stream
-         (reify ForeachAction
-           (apply [_ k v]
-             (log/infof "Key: %s, Data: %s" k v)))))
-
-(defn build-stream
-  [builder input-topic]
-  (.stream builder input-topic))
 
 (defn impressions-clicks-topology
   [^KStream impressions ^KStream clicks]
@@ -32,10 +22,10 @@
         ad-impressions-topic "adImpressions"
         ad-clicks-topic "adClicks"
         output-topic "output-topic"
-        impressions (build-stream builder ad-impressions-topic)
-        clicks (build-stream builder ad-clicks-topic)]
+        impressions (kstream-utils/build-stream builder ad-impressions-topic)
+        clicks (kstream-utils/build-stream builder ad-clicks-topic)]
 
     (-> (impressions-clicks-topology impressions clicks)
-        (peek-stream)
+        (kstream-utils/peek-stream)
         (.to output-topic))
     builder))

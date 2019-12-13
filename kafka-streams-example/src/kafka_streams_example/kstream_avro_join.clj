@@ -1,18 +1,11 @@
 (ns kafka-streams-example.kstream-avro-join
-  (:require [clojure.tools.logging :as log])
+  (:require [kafka-streams-example.utils :as kstream-utils])
   (:import (org.apache.kafka.streams StreamsBuilder)
            (org.apache.kafka.streams.kstream KStream ValueJoiner JoinWindows ForeachAction Consumed Joined Produced)
            (org.apache.kafka.common.serialization Serdes)
            (org.apache.avro Schema Schema$Field Schema$Type)
            (java.util ArrayList)
            (org.apache.avro.generic GenericRecordBuilder)))
-
-(defn peek-stream
-  [stream]
-  (.peek stream
-         (reify ForeachAction
-           (apply [_ k v]
-             (log/infof "Key: %s, Data: %s" k v)))))
 
 (defn build-repayment-processed-schema
   []
@@ -65,6 +58,6 @@
         transaction-stream (build-stream builder transaction-topic key-serializer value-serializer)]
 
     (-> (join-repayment-transaction-topology repayment-stream transaction-stream value-serializer)
-        (peek-stream)
+        (kstream-utils/peek-stream)
         (.to processed-repayment-topic (Produced/with key-serializer value-serializer)))
     builder))

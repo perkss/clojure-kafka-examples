@@ -1,14 +1,7 @@
 (ns kafka-streams-example.ktable-example
+  (:require [kafka-streams-example.utils :as kstream-utils])
   (:import (org.apache.kafka.streams StreamsBuilder KeyValue)
-           (org.apache.kafka.streams.kstream KStream KTable ValueJoiner KGroupedStream KeyValueMapper Reducer)))
-
-(defn ^KStream user-click-stream
-  [builder input-topic]
-  (.stream builder input-topic))
-
-(defn ^KTable user-region-table
-  [builder input-topic]
-  (.table builder input-topic))
+           (org.apache.kafka.streams.kstream KStream KTable ValueJoiner KeyValueMapper Reducer)))
 
 (defn clicks-per-region
   [^KStream user-clicks-stream ^KTable user-regions-table]
@@ -39,8 +32,8 @@
         input-topic-clicks "user-clicks-topic"
         input-topic-regions "user-regions-topic"
         output-topic "clicks-per-region-topic"
-        user-clicks (user-click-stream builder input-topic-clicks)
-        user-regions (user-region-table builder input-topic-regions)]
+        user-clicks (kstream-utils/build-stream builder input-topic-clicks)
+        user-regions (kstream-utils/build-table builder input-topic-regions)]
     (-> (clicks-per-region user-clicks user-regions)
         (.toStream)
         (.to output-topic))
