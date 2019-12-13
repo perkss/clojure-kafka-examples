@@ -46,14 +46,12 @@ from the provided kafka topic name"
   (let [consumer-topic "example-consumer-topic"
         producer-topic "example-produced-topic"
         bootstrap-server (env :bootstrap-server "localhost:9092")
-        zookeeper-hosts (env :zookeeper-hosts "localhost:2181")]
+        consumer (build-consumer consumer-topic bootstrap-server)
+        producer (build-producer bootstrap-server)]
+
     ;; Create the example topics
     (log/infof "Creating the topics %s" [producer-topic consumer-topic])
     (create-topics! bootstrap-server [producer-topic consumer-topic] 1 1)
-
-    (def consumer (build-consumer consumer-topic bootstrap-server))
-
-    (def producer (build-producer bootstrap-server))
 
     (log/infof "Starting the kafka example app. With topic consuming topic %s and producing to %s"
                consumer-topic producer-topic)

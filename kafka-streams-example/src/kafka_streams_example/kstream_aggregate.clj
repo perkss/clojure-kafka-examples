@@ -29,8 +29,7 @@
         (reify Aggregator
           (apply [_ _ new-value agg-value]
             (long (+ (.length new-value) agg-value))))
-        (Materialized/with (Serdes/String) (Serdes/Long)))
- ))
+        (Materialized/with (Serdes/String) (Serdes/Long)))))
 
 (defn build-aggregate-topology
   []

@@ -1,27 +1,15 @@
 (ns kafka-streams-example.kstream-avro-join-test
   (:require [clojure.test :refer :all])
-  (:require [kafka-streams-example.kstream-avro-join :as sut])
-  (:import (org.apache.kafka.streams StreamsConfig TopologyTestDriver)
-           (org.apache.kafka.test TestUtils)
+  (:require [kafka-streams-example.kstream-avro-join :as sut]
+            [kafka-streams-example.test-support :as support])
+  (:import (org.apache.kafka.streams TopologyTestDriver)
            (org.apache.kafka.streams.test ConsumerRecordFactory)
            (io.confluent.kafka.schemaregistry.client MockSchemaRegistryClient)
            (io.confluent.kafka.streams.serdes.avro GenericAvroSerde)
            (org.apache.kafka.common.serialization Serdes)
            (org.apache.avro Schema$Field Schema Schema$Type)
-           (java.util ArrayList Properties)
+           (java.util ArrayList)
            (org.apache.avro.generic GenericRecordBuilder)))
-
-(def properties
-  (let [properties (Properties.)]
-    (.put properties StreamsConfig/APPLICATION_ID_CONFIG (str "repayments-application" (rand)))
-    (.put properties StreamsConfig/PROCESSING_GUARANTEE_CONFIG StreamsConfig/EXACTLY_ONCE)
-    (.put properties StreamsConfig/DEFAULT_KEY_SERDE_CLASS_CONFIG (.getName (.getClass (Serdes/String))))
-    (.put properties StreamsConfig/DEFAULT_VALUE_SERDE_CLASS_CONFIG (.getName (.getClass (Serdes/String))))
-    (.put properties StreamsConfig/BOOTSTRAP_SERVERS_CONFIG "dummy:9092")
-    (.put properties "schema.registry.url" "http://localhost")
-    (.put properties StreamsConfig/COMMIT_INTERVAL_MS_CONFIG (* 10 1000))
-    (.put properties StreamsConfig/STATE_DIR_CONFIG (.getAbsolutePath (TestUtils/tempDirectory)))
-    properties))
 
 (defn build-transaction-schema
   []
@@ -83,7 +71,7 @@
           topology (.build (sut/repayment-transaction-topology
                             key-serdes
                             value-serdes))
-          topology-test-driver (TopologyTestDriver. topology properties)
+          topology-test-driver (TopologyTestDriver. topology (support/properties "repayments-application"))
           repayment-topic "repayment"
           transaction-topic "transaction"
           processed-repayment-topic "processed-repayment"]
