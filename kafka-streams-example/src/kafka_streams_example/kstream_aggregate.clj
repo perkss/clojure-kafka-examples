@@ -12,7 +12,7 @@
 ;        (aggKey, newValue, aggValue) -> aggValue + newValue, /* adder */
 ;        Materialized.<String, Long, WindowStore<Bytes, byte[]>>as("time-windowed-aggregated-stream-store") /* state store name */
 ;        .withValueSerde(Serdes.Long())); /* serde for aggregate value */
-(defn ^KTable impressions-clicks-topology
+(defn ^KTable aggregate-starting-letter-topology
   [^KStream input]
   (-> input
       (.groupBy (reify KeyValueMapper
@@ -34,7 +34,7 @@
         output-topic "output-topic"
         input (kstream-utils/build-stream builder input-topic)]
 
-    (-> (impressions-clicks-topology input)
+    (-> (aggregate-starting-letter-topology input)
         (.toStream)
         (.to output-topic (Produced/with (Serdes/String) (Serdes/Long))))
     builder))
