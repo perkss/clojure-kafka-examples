@@ -6,8 +6,7 @@
     [kafka-streams-example.processor-api-rekey :as sut]
     [kafka-streams-example.test-support :as support])
   (:import org.apache.kafka.common.serialization.Serdes
-           [org.apache.kafka.streams TopologyTestDriver Topology]
-           org.apache.kafka.streams.test.ConsumerRecordFactory))
+           [org.apache.kafka.streams TopologyTestDriver Topology]))
 
 (deftest trade-rekey-to-id-test
   (testing "A test that rekeys the trade messages to trade-id from id"
@@ -17,9 +16,8 @@
           key-deserializer (.deserializer (. Serdes String))
           value-serializer (.serializer json-serde)
           value-deserializer (.deserializer json-serde)
-          factory (ConsumerRecordFactory. key-serializer value-serializer)
-          input-topic "trade-input-topic"
-          output-topic "trades-by-trade-id"
+          input-topic (.createInputTopic topology-test-driver "trade-input-topic" key-serializer value-serializer)
+          output-topic (.createOutputTopic topology-test-driver "trades-by-trade-id" key-deserializer value-deserializer)
           trade-msg {:id       (str (uuid/v4))
                      :trade-id (str (uuid/v4))
                      :buyer    "perkss"
@@ -28,10 +26,10 @@
           new-trade-msg-key (:trade-id trade-msg)]
 
       ;; Send in with Key ID
-      (.pipeInput topology-test-driver (.create factory input-topic trade-msg-key trade-msg))
+      (.pipeInput input-topic trade-msg-key trade-msg)
 
       ;; The new key is the trade-id
-      (let [output (.readOutput topology-test-driver output-topic key-deserializer value-deserializer)]
+      (let [output (.readKeyValue output-topic)]
         (is (= new-trade-msg-key (.key output)))
         (is (= trade-msg (.value output))))
 
