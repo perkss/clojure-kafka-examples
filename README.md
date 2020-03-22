@@ -22,6 +22,11 @@ Check out the unit tests for each file to see it in action without the need for 
 * TopologyTestDriver
 * More examples to come regularly watch this space ...
 
+## Integration Testcontainers
+Testcontainers provide the ability to test applications that have docker interactions simply by starting up your containers 
+in our examples Kafka we can then start our applications up against this container and run the tests in a fully integrated 
+test with Kafka. Awesome!
+
 ## Kafka and Zookeeper
 
 We have provided our own docker-compose file that will start Kafka and Zookeeper via localhost, so other containers or local apps can access the broker.
@@ -32,7 +37,7 @@ Start this using the command `docker-compose up -d`
 version: '3'
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:5.3.0
+    image: confluentinc/cp-zookeeper:5.4.1
     hostname: zookeeper
     container_name: zookeeper
     ports:
@@ -41,7 +46,7 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
   broker:
-    image: confluentinc/cp-enterprise-kafka:5.3.0
+    image: confluentinc/cp-enterprise-kafka:5.4.1
     hostname: broker
     container_name: broker
     depends_on:
