@@ -2,6 +2,11 @@
 
 An example showing how to use Kafka producer and consumer using Clojure and the Java API via Java interop. Simple example that consumers from a topic logs the input and then sends on the value to another topic for the user to see. You can run it as a plain jar with all the Kafka Broker and Zookeeper running or you can use the Docker set up we have done and follow the blog post https://perkss.github.io/#/DevOps! Up to you.
 
+## Integration Test
+To get started simply have Docker running and run `lein test` and this will run the integration test where Kafka is started up 
+we start our application up, drop a test message on the topic and consume if after being processed by our application on the 
+output topic. 
+
 ## Installation
 
 Requires Zookeeper and Kafka to be set up. Please check the main README to run the bundled `docker-compose` file. Check the ports match from the code.
