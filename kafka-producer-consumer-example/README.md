@@ -24,6 +24,10 @@ In the project directory run :
 
 This starts the project and you should see it log out that it has started.
 
+If you simply want to run the code just do :
+
+    $ lein run
+
 You then need to set up the Kafka topics, producer and consumer as specified in the start.sh script. Once set up you can produce to the example topic for example Hello
 
 With the app running it will log out:
@@ -63,7 +67,7 @@ Or pass localhost and from the machine
     
 Now create the consumer to listen to messages you will eventually produce and will be processed by Java.
 
-    $ docker exec broker kafka-console-consumer --bootstrap-server broker:9092 --topic example-produced-topic --from-beginning
+    $ docker exec broker kafka-console-consumer --bootstrap-server broker:9092 --topic example-produced-topic --property print.key=true --from-beginning 
 
 Or from the local machine instance
 
@@ -71,7 +75,7 @@ Or from the local machine instance
     
 Now create the producer to send messages that will be processed
 
-    $ docker exec broker -it kafka-console-producer --broker-list broker:9092 --topic example-consumer-topic
+    $ docker exec -it broker kafka-console-producer --broker-list broker:9092 --topic example-consumer-topic
     
 Or from the local
 

@@ -1,3 +1,4 @@
+#### Note: WE ADVISE USE DOCKER-COMPOSE. Use this if you want to start Kafka and Zookeeper on bare metal.
 
 # Start Zookeeper
 /usr/local/zookeeper/bin/zkServer.sh start

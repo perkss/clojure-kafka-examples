@@ -28,10 +28,9 @@
                     StreamsConfig/BOOTSTRAP_SERVERS_CONFIG,         "broker:9092"
                     StreamsConfig/DEFAULT_KEY_SERDE_CLASS_CONFIG,   (.getName (.getClass (Serdes/String)))
                     StreamsConfig/DEFAULT_VALUE_SERDE_CLASS_CONFIG, (.getName (.getClass (Serdes/String)))}
-        config (StreamsConfig. properties)
         input-topic "plaintext-input"
         output-topic "uppercase"
-        streams (KafkaStreams. (.build (to-uppercase-topology input-topic output-topic)) config)]
+        streams (KafkaStreams. (.build (to-uppercase-topology input-topic output-topic)) properties)]
     (log/info "starting stream with topology to upper case")
     (.start streams)
     (Thread/sleep (* 60000 10))

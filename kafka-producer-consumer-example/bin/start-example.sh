@@ -2,6 +2,7 @@
 echo "Running Kafka Producer Consumer. You must have confluent platform on your
  path installed from: https://docs.confluent.io/current/quickstart/index.html."
 
+### Note: WE ADVISE USE DOCKER-COMPOSE. Use this if you want to use the confluent install
 
 export BOOTSTRAP_SERVER=localhost:9092
 export ZOOKEEPER_HOSTS=localhost:2181
