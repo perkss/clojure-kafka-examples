@@ -1,11 +1,12 @@
 (ns kafka-streams-example.kstream-avro-join
   (:require [kafka-streams-example.utils :as kstream-utils])
   (:import (org.apache.kafka.streams StreamsBuilder)
-           (org.apache.kafka.streams.kstream KStream ValueJoiner JoinWindows ForeachAction Consumed Joined Produced)
+           (org.apache.kafka.streams.kstream KStream ValueJoiner JoinWindows ForeachAction Consumed Joined Produced StreamJoined)
            (org.apache.kafka.common.serialization Serdes)
            (org.apache.avro Schema Schema$Field Schema$Type)
            (java.util ArrayList)
-           (org.apache.avro.generic GenericRecordBuilder)))
+           (org.apache.avro.generic GenericRecordBuilder)
+           (java.time Duration)))
 
 (defn build-repayment-processed-schema
   []
@@ -43,8 +44,8 @@
                  ((fn [repayment-value transaction-value]
                     (build-repayment-processed-record repayment-value transaction-value (build-repayment-processed-schema)))
                   left right)))
-             (. JoinWindows of 5000)
-             (. Joined with (. Serdes String)
+             (. JoinWindows of (Duration/ofMillis 5000))
+             (. StreamJoined with (. Serdes String)
                 value-serializer
                 value-serializer))))
 

@@ -40,7 +40,7 @@
     (log/infof "Pending messages? %s" (pending-messages end-offsets consumer))
     (while (pending-messages end-offsets consumer)
       (log/infof "Pending messages? %s" (pending-messages end-offsets consumer))
-      (let [records (.poll consumer (Duration/ofMillis 1000))
+      (let [records (.poll consumer (Duration/ofMillis 50))
             matched-search-key (filter #(= (.key %) search-key) records)]
         (conj! found-records matched-search-key)
         (doseq [record matched-search-key]
@@ -50,7 +50,7 @@
 (defn build-consumer
   "Create the consumer instance to consume
 from the provided kafka topic name"
-  [consumer-topic bootstrap-server]
+  [bootstrap-server]
   (let [consumer-props
         {"bootstrap.servers",  bootstrap-server
          "group.id",           "example"
@@ -78,8 +78,8 @@ from the provided kafka topic name"
   (let [consumer-topic "example-consumer-topic"
         producer-topic "example-produced-topic"
         bootstrap-server (env :bootstrap-server bootstrap-server)
-        replay-consumer (build-consumer consumer-topic bootstrap-server)
-        consumer (build-consumer consumer-topic bootstrap-server)
+        replay-consumer (build-consumer bootstrap-server)
+        consumer (build-consumer bootstrap-server)
         producer (build-producer bootstrap-server)]
     (log/infof "Creating the topics %s" [producer-topic consumer-topic])
     (create-topics! bootstrap-server [producer-topic consumer-topic] 1 1)

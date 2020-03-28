@@ -1,7 +1,8 @@
 (ns kafka-streams-example.kstream-kstream-outer-join-example
   (:require [kafka-streams-example.utils :as kstream-utils])
   (:import (org.apache.kafka.streams StreamsBuilder)
-           (org.apache.kafka.streams.kstream KStream ValueJoiner JoinWindows)))
+           (org.apache.kafka.streams.kstream KStream ValueJoiner JoinWindows)
+           (java.time Duration)))
 
 (defn impressions-clicks-topology
   [^KStream impressions ^KStream clicks]
@@ -12,7 +13,7 @@
                       ((fn [impression-value click-value]
                          (str impression-value "/" click-value))
                        left right)))
-                  (. JoinWindows of 5000))))
+                  (. JoinWindows of (Duration/ofMillis 5000)))))
 
 (defn builder-streaming-join-topology
   []
