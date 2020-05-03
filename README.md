@@ -2,7 +2,7 @@
 
 A selection of examples using Kafka and Kafka Streams with Clojure. I wanted to learn the real Kafka API via Clojure not via a Clojure wrapper so here are examples of using the raw API, which is clean and means you do not need to wait for Clojure wrapper libraries to upgrade Kafka. 
 
-Blog post [here](https://perkss.github.io/#/clojure/KafkaClojure#text-body)
+A guide to the examples can be find in this post [here](https://perkss.github.io/#/clojure/KafkaClojure#text-body) and the Medium [version](https://medium.com/@stuart.m.perks/kafka-and-kafka-stream-examples-in-clojure-b1aa0c3d5cb3). 
 
 ## Prerequisites
 Expected to be able to set up Zookeeper and Kafka Broker to run the examples. Or use the Confluent platform. 
