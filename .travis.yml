@@ -1,2 +1,12 @@
 language: clojure
-before_install: cd kafka-streams-example
+
+jdk:
+  - oraclejdk11
+
+sudo: required
+services:
+  - docker
+
+before_install: cd kafka-producer-consume-example
+
+script: lein test
