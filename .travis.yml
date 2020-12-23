@@ -7,6 +7,9 @@ sudo: required
 services:
   - docker
 
-before_install: cd kafka-producer-consume-example
+before_install:
+  - echo 'DOCKER_OPTS="$DOCKER_OPTS --registry-mirror=https://mirror.gcr.io"'
+  - sudo service docker restart
+  - cd kafka-producer-consumer-example
 
-script: lein test
+script: lein test && cd ../kafka-streams-example && lein deps && lein test && cd ../kafka-streams-examples-java && mvn test
