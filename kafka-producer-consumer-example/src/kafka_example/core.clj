@@ -2,7 +2,7 @@
   (:gen-class)
   (:require [clojure.tools.logging :as log]
             [environ.core :refer [env]])
-  (:import [org.apache.kafka.clients.admin AdminClient AdminClientConfig NewTopic]
+  (:import [org.apache.kafka.clients.admin AdminClientConfig NewTopic KafkaAdminClient]
            org.apache.kafka.clients.consumer.KafkaConsumer
            [org.apache.kafka.clients.producer KafkaProducer ProducerRecord]
            [org.apache.kafka.common.serialization StringDeserializer StringSerializer]
@@ -13,7 +13,7 @@
   "Create the topic "
   [bootstrap-server topics ^Integer partitions ^Short replication]
   (let [config {AdminClientConfig/BOOTSTRAP_SERVERS_CONFIG bootstrap-server}
-        adminClient (AdminClient/create config)
+        adminClient (KafkaAdminClient/create config)
         new-topics (map (fn [^String topic-name] (NewTopic. topic-name partitions replication)) topics)]
     (.createTopics adminClient new-topics)))
 
