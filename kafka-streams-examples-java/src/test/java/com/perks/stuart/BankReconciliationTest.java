@@ -7,12 +7,11 @@ import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.generic.GenericRecordBuilder;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.TopologyTestDriver;
-import org.apache.kafka.streams.test.ConsumerRecordFactory;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -94,25 +93,22 @@ class BankReconciliationTest {
         TopologyTestDriver topologyTestDriver = new TopologyTestDriver(
                 bankReconciliation.topology(keySerde, genericAvroSerde).build(),
                 properties);
+        var transactionTopic = topologyTestDriver.createInputTopic("transaction", keySerde.serializer(), genericAvroSerde.serializer());
+        var repaymentTopic = topologyTestDriver.createInputTopic("repayment", keySerde.serializer(), genericAvroSerde.serializer());
 
-        var repaymentTopic = "repayment";
-        var transactionTopic = "transaction";
-        var processedRepaymentTopic = "processed-repayment";
+        var processedRepaymentTopic = topologyTestDriver.createOutputTopic("processed-repayment", keySerde.deserializer(), genericAvroSerde.deserializer());
 
-        ConsumerRecordFactory factory = new ConsumerRecordFactory(keySerde.serializer(), genericAvroSerde.serializer());
+        transactionTopic.pipeInput(transactionId, buildTransactionRecord(transactionId, amount));
 
-        topologyTestDriver.pipeInput(factory.create(transactionTopic, transactionId, buildTransactionRecord(transactionId, amount)));
+        repaymentTopic.pipeInput(repaymentId, buildRepaymentRecord(repaymentId, amount));
 
-        topologyTestDriver.pipeInput(factory.create(repaymentTopic, repaymentId, buildRepaymentRecord(repaymentId, amount)));
+        KeyValue<String, GenericRecord> outputRecord = processedRepaymentTopic
+                .readKeyValue();
 
-        ProducerRecord<String, GenericRecord> outputRecord = topologyTestDriver
-                .readOutput(processedRepaymentTopic, keySerde.deserializer(), genericAvroSerde.deserializer());
-
-        assertEquals(repaymentId, outputRecord.key());
-        assertEquals(repaymentId, outputRecord.value().get("id").toString());
-        assertEquals(amount, outputRecord.value().get("repayment_amount"));
-        assertEquals(amount, outputRecord.value().get("transaction_amount"));
-
+        assertEquals(repaymentId, outputRecord.key);
+        assertEquals(repaymentId, outputRecord.value.get("id").toString());
+        assertEquals(amount, outputRecord.value.get("repayment_amount"));
+        assertEquals(amount, outputRecord.value.get("transaction_amount"));
 
 
     }

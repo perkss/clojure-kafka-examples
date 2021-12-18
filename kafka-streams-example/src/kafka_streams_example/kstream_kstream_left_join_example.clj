@@ -2,7 +2,8 @@
   (:require [clojure.tools.logging :as log])
   (:require [kafka-streams-example.utils :as kstream-utils])
   (:import [org.apache.kafka.streams.kstream JoinWindows KStream ValueJoiner]
-           org.apache.kafka.streams.StreamsBuilder))
+           org.apache.kafka.streams.StreamsBuilder
+           (java.time Duration)))
 
 (defn impressions-clicks-topology
   [^KStream impressions ^KStream clicks]
@@ -14,7 +15,7 @@
                         (log/infof "Received values impression value: %s click: %s" impression-value click-value)
                         (str impression-value "/" click-value))
                       left right)))
-                 (. JoinWindows of (* 50 60 10000)))))
+                 (. JoinWindows of (Duration/ofMillis (* 50 60 10000))))))
 
 (defn builder-streaming-join-topology
   []

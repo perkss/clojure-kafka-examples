@@ -2,7 +2,7 @@
   (:require [clojure.tools.logging :as log]
             [kafka-streams-example.serdes.json-serdes :refer [json-serde]])
   (:import (org.apache.kafka.streams.processor Processor
-                                               ProcessorSupplier)
+                                               ProcessorSupplier ProcessorContext To)
            org.apache.kafka.common.serialization.Serdes))
 
 (defn re-key-stream-processor
@@ -25,9 +25,9 @@
 
 (defn re-key-trades
   "Function provided to rekey"
-  [context sink {:keys [trade-id] :as message}]
+  [^ProcessorContext context sink-name {:keys [trade-id] :as message}]
   (log/infof "Sending on rekey trade Key: %s Message %s" trade-id message)
-  (.forward context trade-id message sink))
+  (.forward context trade-id message (To/child sink-name)))
 
 (defn trade-rekey-topology
   "Topology that takes a trade and rekeys it by the provided function"

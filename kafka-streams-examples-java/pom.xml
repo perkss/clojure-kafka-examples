@@ -24,18 +24,18 @@
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-streams</artifactId>
-            <version>2.0.0-cp1</version>
+            <version>3.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-streams-test-utils</artifactId>
-            <version>2.0.0</version>
+            <version>3.0.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
-            <version>2.0.0-cp1</version>
+            <version>3.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.avro</groupId>
@@ -45,7 +45,7 @@
         <dependency>
             <groupId>io.confluent</groupId>
             <artifactId>kafka-streams-avro-serde</artifactId>
-            <version>5.0.0</version>
+            <version>7.0.1</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>

@@ -4,7 +4,7 @@
            (org.apache.kafka.common.serialization Serdes)
            (org.apache.kafka.test TestUtils)))
 
-(defn properties [application-name]
+(defn ^Properties properties [application-name]
   (let [properties (Properties.)]
     (.put properties StreamsConfig/APPLICATION_ID_CONFIG application-name)
     (.put properties StreamsConfig/BOOTSTRAP_SERVERS_CONFIG "dummy:9092")

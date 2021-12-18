@@ -11,11 +11,11 @@
 (deftest trade-rekey-to-id-test
   (testing "A test that rekeys the trade messages to trade-id from id"
     (let [topology (sut/trade-rekey-topology (Topology.))
-          topology-test-driver (TopologyTestDriver. topology (support/properties "word-count-application"))
           key-serializer (.serializer (. Serdes String))
           key-deserializer (.deserializer (. Serdes String))
           value-serializer (.serializer json-serde)
           value-deserializer (.deserializer json-serde)
+          topology-test-driver (TopologyTestDriver. topology (support/properties "word-count-application"))
           input-topic (.createInputTopic topology-test-driver "trade-input-topic" key-serializer value-serializer)
           output-topic (.createOutputTopic topology-test-driver "trades-by-trade-id" key-deserializer value-deserializer)
           trade-msg {:id       (str (uuid/v4))
