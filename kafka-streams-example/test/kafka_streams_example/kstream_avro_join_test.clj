@@ -2,8 +2,7 @@
   (:require [clojure.test :refer :all])
   (:require [kafka-streams-example.kstream-avro-join :as sut]
             [kafka-streams-example.test-support :as support])
-  (:import (org.apache.kafka.streams TopologyTestDriver)
-           (org.apache.kafka.streams.test ConsumerRecordFactory)
+  (:import (org.apache.kafka.streams TopologyTestDriver Topology KeyValue)
            (io.confluent.kafka.schemaregistry.client MockSchemaRegistryClient)
            (io.confluent.kafka.streams.serdes.avro GenericAvroSerde)
            (org.apache.kafka.common.serialization Serdes)
@@ -64,30 +63,25 @@
           serdes-config {"schema.registry.url" "http://localhost"}
           key-serdes (. Serdes String)
           value-serdes (doto
-                        (GenericAvroSerde. schema-registry)
+                         (GenericAvroSerde. schema-registry)
                          (.configure serdes-config false))
-          factory (ConsumerRecordFactory. (.serializer key-serdes)
-                                          (.serializer value-serdes))
-          topology (.build (sut/repayment-transaction-topology
-                            key-serdes
-                            value-serdes))
+          key-serializer (.serializer key-serdes)
+          key-deserializer (.deserializer key-serdes)
+          value-serializer (.serializer value-serdes)
+          value-deserializer (.deserializer value-serdes)
+          ^Topology topology (.build (sut/repayment-transaction-topology
+                                       key-serdes
+                                       value-serdes))
           topology-test-driver (TopologyTestDriver. topology (support/properties "repayments-application"))
-          repayment-topic "repayment"
-          transaction-topic "transaction"
-          processed-repayment-topic "processed-repayment"]
+          repayment-topic (.createInputTopic topology-test-driver "repayment" key-serializer value-serializer)
+          transaction-topic (.createInputTopic topology-test-driver "transaction" key-serializer value-serializer)
+          processed-repayment-topic (.createOutputTopic topology-test-driver "processed-repayment" key-deserializer value-deserializer)
+          ]
 
-      (.pipeInput topology-test-driver (.create factory
-                                                transaction-topic
-                                                transaction-id
-                                                (build-transaction-record transaction (build-transaction-schema))))
-      (.pipeInput topology-test-driver (.create factory
-                                                repayment-topic
-                                                repayment-id
-                                                (build-repayment-record repayment (build-repayment-schema))))
+      (.pipeInput transaction-topic transaction-id (build-transaction-record transaction (build-transaction-schema)))
+      (.pipeInput repayment-topic repayment-id (build-repayment-record repayment (build-repayment-schema)))
 
-      (let [output (.readOutput topology-test-driver processed-repayment-topic
-                                (.deserializer key-serdes)
-                                (.deserializer value-serdes))]
+      (let [^KeyValue output (.readKeyValue processed-repayment-topic)]
         (is (= repayment-id (.key output)))
         (is (= 10241241 (.get (.value output) "account")))
         (is (= repayment-id (.toString (.get (.value output) "id"))))

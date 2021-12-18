@@ -2,10 +2,11 @@
   (:require [clojure.string :as str]
             [clojure.tools.logging :as log])
   (:import (org.apache.kafka.streams.processor Processor
-                                               ProcessorSupplier PunctuationType Punctuator)
+                                               ProcessorSupplier PunctuationType Punctuator ProcessorContext)
            (org.apache.kafka.streams Topology)
            org.apache.kafka.common.serialization.Serdes
-           (org.apache.kafka.streams.state Stores)))
+           (org.apache.kafka.streams.state Stores)
+           (java.time Duration)))
 
 ;; inspired by https://kafka.apache.org/11/documentation/streams/developer-guide/processor-api.html
 
@@ -37,7 +38,7 @@
   [store-name]
   (let [store (atom {})
         context (atom nil)
-        timestamp 10]
+        timestamp (Duration/ofMillis 10)]
     (reify
       Processor
       (close [_])
@@ -45,7 +46,7 @@
         (reset! context processor-context)
         (reset! store (.getStateStore @context store-name)) ;; Assign the state store to the atom
 
-        (.schedule @context
+        (.schedule ^ProcessorContext @context
                    timestamp
                    PunctuationType/STREAM_TIME
                    (punctuator-forward-message timestamp store context)))

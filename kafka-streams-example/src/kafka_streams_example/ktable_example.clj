@@ -1,6 +1,6 @@
 (ns kafka-streams-example.ktable-example
   (:require [kafka-streams-example.utils :as kstream-utils])
-  (:import (org.apache.kafka.streams StreamsBuilder KeyValue)
+  (:import (org.apache.kafka.streams StreamsBuilder KeyValue Topology)
            (org.apache.kafka.streams.kstream KStream KTable ValueJoiner KeyValueMapper Reducer)))
 
 (defn clicks-per-region
