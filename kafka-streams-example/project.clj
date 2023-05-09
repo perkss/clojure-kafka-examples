@@ -1,20 +1,17 @@
 (defproject kafka-streams-example "0.1.0-SNAPSHOT"
   :description "Kafka Streams Example"
   :url "https://perkss.github.io/#/clojure/KafkaClojure#text-body"
-  :dependencies [[org.clojure/clojure "1.10.1"]
+  :dependencies [[org.clojure/clojure "1.11.1"]
                  [org.clojure/data.json "0.2.6"]
-                 [org.apache.kafka/kafka-streams "3.0.0"]
-                 [org.apache.kafka/kafka-clients "3.0.0"]
-                 [org.apache.kafka/kafka-streams-test-utils "3.0.0"]
-                 [org.apache.kafka/kafka-clients "3.0.0" :classifier "test"]
-                 [io.confluent/kafka-streams-avro-serde "7.0.1"]
-                 [org.clojure/tools.logging "0.4.0"]
-                 [org.slf4j/slf4j-log4j12 "1.7.1"]
-                 [log4j/log4j "1.2.17" :exclusions [javax.mail/mail
-                                                    javax.jms/jms
-                                                    com.sun.jmdk/jmxtools
-                                                    com.sun.jmx/jmxri]]
-                 [danlentz/clj-uuid "0.1.7"]]
+                 [org.apache.kafka/kafka-streams "3.4.0"]
+                 [org.apache.kafka/kafka-clients "3.4.0"]
+                 [org.apache.kafka/kafka-streams-test-utils "3.4.0"]
+                 [org.apache.kafka/kafka-clients "3.4.0" :classifier "test"]
+                 [io.confluent/kafka-streams-avro-serde "7.3.3"]
+                 [org.clojure/tools.logging "1.2.4"]
+                 [org.slf4j/slf4j-log4j12 "2.0.7"]
+                 [org.apache.logging.log4j/log4j-core "2.20.0"]
+                 [danlentz/clj-uuid "0.1.9"]]
 
   :repositories [["confluent"  {:url "https://packages.confluent.io/maven/"}]]
   :plugins [[lein-cljfmt "0.6.1"]]

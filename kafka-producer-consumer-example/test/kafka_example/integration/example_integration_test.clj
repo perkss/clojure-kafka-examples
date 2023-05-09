@@ -1,6 +1,6 @@
 (ns kafka-example.integration.example-integration-test
-  (:require [clojure.test :refer :all]
-            [kafka-example.core :refer :all])
+  (:require [clojure.test :refer [deftest testing is]]
+            [kafka-example.core :refer [build-consumer build-producer run-application consumer-subscribe]])
   (:import (org.testcontainers.containers KafkaContainer)
            (org.apache.kafka.clients.producer ProducerRecord)
            (org.testcontainers.utility DockerImageName)))
